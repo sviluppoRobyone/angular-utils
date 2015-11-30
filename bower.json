@@ -14,15 +14,9 @@
   "license": "MIT",
   "homepage": "",
   "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-	"*.ts",
-    "*.config",
-    "*.csproj",
-	"*.sln",
-    "test",
-    "tests"
+	"*",
+    "!dist/",
+    "!dist/*"
   ],
   "dependencies": {
     "angular": "~1.4.8",

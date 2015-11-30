@@ -4,7 +4,10 @@
     "Gianluca Cagnin <gianluca.cagnin@robyone.net>"
   ],
   "description": "",
-  "main": "",
+  "main": [
+	"./dist/AngularUtils.js",
+	"./dist/AngularUtils.js.map"
+  ],
   "moduleType": [
     "es6"
   ],
@@ -14,6 +17,10 @@
     "**/.*",
     "node_modules",
     "bower_components",
+	"*.ts",
+    "*.config",
+    "*.csproj",
+	"*.sln",
     "test",
     "tests"
   ],

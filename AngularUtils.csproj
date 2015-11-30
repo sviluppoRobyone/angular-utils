@@ -31,6 +31,9 @@
     <Content Include="bower_components\bootstrap\dist\js\bootstrap.js" />
     <Content Include="bower_components\bootstrap\dist\js\bootstrap.min.js" />
     <Content Include="bower_components\bootstrap\dist\js\npm.js" />
+    <Content Include="bower_components\components-font-awesome\css\font-awesome.css" />
+    <Content Include="bower_components\components-font-awesome\css\font-awesome.min.css" />
+    <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="bower_components\jquery\dist\jquery.js" />
     <Content Include="dist\AngularUtils.js" />
     <Content Include="dist\demo.js" />
@@ -63,6 +66,11 @@
     <Content Include="bower.json" />
     <Content Include="dist\AngularUtils.js.map" />
     <Content Include="dist\demo.js.map" />
+    <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="bower_components\components-font-awesome\fonts\FontAwesome.otf" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

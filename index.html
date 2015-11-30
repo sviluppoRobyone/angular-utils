@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>TypeScript HTML App</title>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" type="text/css"/>
+    <link rel="stylesheet" href="bower_components/components-font-awesome/css/font-awesome.min.css" type="text/css"/>
+
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+    
+    <script src="dist/AngularUtils.js"></script>
+    <script src="dist/demo.js"></script>
+</head>
+<body ng-app="angularUtilsDemo">
+    
+
+    <div class="container" >
+        <h1>Angular Utils Demo</h1>
+
+        <div class="container-fluid" ng-controller="demoContoller as Ctrl">
+
+            <div class="row">
+                <div class="col-md-6">
+
+                    <div ng-form="demoForm">
+
+                        <div au-input="Ctrl.data.textInput" label="'Text Input'"  required="true" ></div>
+                        <div au-input="Ctrl.data.numberInput" label="'Number Input'" type="'number'" min="'-10'"></div>
+                        <div au-input="Ctrl.data.booleanInput" label="'Boolean Input'" type="'checkbox'" required="true"></div>
+
+
+                        <div au-input="Ctrl.data.fileContent" label="'File Input'" type="'file'" filename="Ctrl.data.fileName" required="true"></div>
+
+                        <span au-button text="'Update'" action="Ctrl.Update()" form="demoForm"></span>
+                    </div>
+
+
+                </div>
+                <div class="col-md-6">
+                    <strong>Form Data</strong>
+                    <pre>{{Ctrl.data|json}}</pre>
+                    <strong>Form Status</strong>
+                    <pre>{{demoForm|json}}</pre>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

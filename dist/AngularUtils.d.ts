@@ -97,6 +97,8 @@ declare module Au {
             required: any;
             type: any;
             hasPattern: boolean;
+            private defaultPattern;
+            getPattern(): any;
             pattern: any;
             requiredText: any;
             patternText: any;

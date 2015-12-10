@@ -28,7 +28,8 @@
 
                     <div ng-form="demoForm">
 
-                        <div au-input="Ctrl.data.textInput" label="'Text Input'"  required="true" ></div>
+                        <div au-input="Ctrl.data.textInput" label="'Text Input'" required="true"></div>
+                        <div au-input="Ctrl.data.patternInput" label="'Pattern Input'" required="true" pattern="Ctrl.pattern"></div>
                         <div au-input="Ctrl.data.numberInput" label="'Number Input'" type="'number'" min="'-10'"></div>
                         <div au-input="Ctrl.data.booleanInput" label="'Boolean Input'" type="'checkbox'" required="true"></div>
 

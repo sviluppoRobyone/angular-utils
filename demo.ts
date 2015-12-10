@@ -2,12 +2,12 @@
     export module demo {
 
         export interface Idata {
-            textInput: string
-            numberInput: number,
-            booleanInput: boolean,
-            fileContent: string,
-            fileName:string
-                
+            textInput: string;
+            numberInput: number;
+            booleanInput: boolean;
+            patternInput:string;
+            fileContent: string;
+            fileName:string;
         }
 
         export class DemoController {
@@ -16,11 +16,12 @@
             data:Idata={
                 booleanInput: false,
                 numberInput: 0,
+                patternInput:null,
                 textInput: "",
                 fileContent: null,
                 fileName:null
             };
-
+            pattern=/^\w+\.\w+$/;
             args:any=null;
             constructor(...args) {
                 this.args = args;

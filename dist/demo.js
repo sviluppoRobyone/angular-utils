@@ -11,10 +11,12 @@ var angularUtils;
                 this.data = {
                     booleanInput: false,
                     numberInput: 0,
+                    patternInput: null,
                     textInput: "",
                     fileContent: null,
                     fileName: null
                 };
+                this.pattern = /^\w+\.\w+$/;
                 this.args = null;
                 this.args = args;
             }

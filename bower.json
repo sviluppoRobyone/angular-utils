@@ -5,8 +5,9 @@
   ],
   "description": "",
   "main": [
-	"./dist/AngularUtils.js",
-	"./dist/AngularUtils.js.map"
+	  "./dist/AngularUtils.js",
+    "./dist/AngularUtils.js.map",
+    "./dist/AngularUtils.d.ts"
   ],
   "moduleType": [
     "es6"
@@ -16,7 +17,8 @@
   "ignore": [
 	"*",
     "!dist/AngularUtils.js",
-    "!dist/AngularUtils.js.map"
+    "!dist/AngularUtils.js",
+    "!dist/AngularUtils.d.ts"
   ],
   "dependencies": {
     "angular": "~1.4.8",

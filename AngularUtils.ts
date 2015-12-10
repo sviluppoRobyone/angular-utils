@@ -1,20 +1,205 @@
-﻿module angularUtils {
-    export module directive {
-        export module input {
+﻿module Au {
+    export module Errors {
+        import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
+
+        export interface IGetErrors<T> {
+                (promise: angular.IDeferred<string[]>, resp: T): void
+         }
+
+        export var defaultError: IGetErrors<any> = (promise,resp) => {
+            promise.resolve(["An error occurred"]);
+        };
+
+        export module dotnet {
+            export interface IModelState {
+                Message:string,
+                ModelState:{[p:string]:string[]}
+            }
+        }
+        export var dotnetMvcError:IGetErrors<IHttpPromiseCallbackArg<dotnet.IModelState>>=(promise,response) => {
+            if (response.data.ModelState) {
+                var errors: string[] = [];
+                for (var k in response.data.ModelState) {
+                    response.data.ModelState[k].forEach(e => {
+                        errors.push(k + ": " + e);
+                    });
+                    
+                }
+                promise.resolve(errors);
+            }
+        }
+    }
+    export module Button{
+           
+
+            export class ActionButtonConfig {
+             
+                getErrors: Errors.IGetErrors<any> =  Errors.defaultError;
+
+
+            }
+            export class ActionButtonCtrl {
+
+                args: any[] = [];
+                static $inject = ["$scope", "$timeout", "$element", "auButtonConfig","$q"];
+                constructor(...args) {
+                    this.args = args;
+
+                }
+
+
+
+
+                static template = `
+            
+            <button ng-disabled="!Ctrl.enabled" ng-click="Ctrl.Click()" class="btn {{Ctrl.type}}">
+                    <i class="fa fa-spin fa-spinner" ng-show="Ctrl.running"></i>
+                    <i class="fa fa-check" ng-show="Ctrl.done"></i>
+                    <i class="fa fa-times" ng-show="Ctrl.error"></i>
+                 {{Ctrl.text}}
+            </button>
+
+
+`;              
+                get $q(): angular.IQService {
+                    return this.args[4];
+                }
+                get auButtonConfig(): ActionButtonConfig {
+                    return this.args[3];
+                }
+                get $scope(): angular.IScope {
+                    return this.args[0];
+                }
+                get $element(): JQuery {
+                    return $(this.args[2]);
+                }
+                get $timeout(): angular.ITimeoutService {
+                    return this.args[1];
+                }
+                get form(): angular.IFormController {
+                    return this.$scope["form"] || null;
+                }
+                get hasForm() {
+                    return this.form != null;
+                }
+                get text(): string {
+                    return this.$scope["text"] || null;
+                }
+                get enabled() {
+                    return !this.running && ((this.hasForm && this.form.$valid) || !this.hasForm);
+                }
+                get action() {
+                    return this.$scope["action"] || (() => null);
+                }
+                get time(): number {
+                    return this.$scope["time"] || 3000;
+                }
+                get type() {
+                    return this.$scope["type"] || "btn-primary";
+                }
+                get confirm() {
+                    return this.$scope["confirm"] || null;
+                }
+                running = false;
+                done: boolean = false;
+                error: boolean = false;
+                Click() {
+                    if (this.hasForm && this.form.$invalid) return;
+
+
+                    this.$element.popover("destroy");
+                    if (this.confirm && !confirm(this.confirm)) return;
+
+                    var action = this.action;
+
+                    this.running = true;
+                    var p = action();
+                    if (!p) {
+                        this.running = false;
+                    }
+                    //se ritorna una promise
+                    if (p && [p.finally, p.then, p.catch].every(x=> x instanceof Function)) {
+
+
+                        (<angular.IPromise<any>>p).finally(() => {
+                            this.running = false;
+                        }).then(() => {
+
+                            this.done = true;
+
+                            this.$timeout(() => {
+                                this.done = false;
+                            }, this.time);
+
+                        }).catch((r) => {
+                            this.error = true;
+
+                            var error$Q = this.$q.defer<string[]>();
+
+                            error$Q.promise.then((errors) => {
+                               this.$element.popover({
+                                   content: () => {
+                                        var ul = $("<ul/>");
+
+                                        errors.forEach(message => {
+                                            $("<li/>").text(message).appendTo(ul);
+                                        });
+                                        var d = $("<div/>");
+                                        d.addClass("text-danger").append(ul);
+                                        return d;
+                                    },
+                                    html: true,
+                                    placement: "top",
+                                    title: "Si sono verificati alcuni errori"
+
+                                }).popover("show");
+
+                                this.$timeout(() => {
+                                        this.error = false;
+                                    }, this.time);
+                            });
+                            
+                            this.auButtonConfig.getErrors(error$Q,r);
+
+
+
+                        });
+                    }
+                    else this.running = true;
+                }
+                static Directive() {
+                    return <angular.IDirective>{
+                        controller: ActionButtonCtrl,
+                        controllerAs: "Ctrl",
+                        replace: true,
+                        template: ActionButtonCtrl.template,
+                        scope: {
+                            action: "&",
+                            form: "=",
+                            text: "=",
+                            type: "=?",
+                            debug: "=?",
+                            confirm: "=?"
+                        }
+                    };
+                }
+            }
+        }
+        export module Input {
 
             
-            export class inputTextDirectiveCtrl {
+            export class InputCtrl {
 
                 static fieldName = "field";
                 static formName = "fit";
                 static template = `
 
-<div class="input-text" ng-form="${inputTextDirectiveCtrl.formName}" ng-class="{'well well-sm':Ctrl.debug}">
+<div class="input-text" ng-form="${InputCtrl.formName}" ng-class="{'well well-sm':Ctrl.debug}">
     <div class="form-group" ng-class="{'has-error':Ctrl.hasErrorClass,'has-success':Ctrl.hasSuccessClass,'has-feedback':Ctrl.hasFeedbackIcon,'has-warning':Ctrl.hasWarnigClass}">
         
         <div ng-if="Ctrl.IsInputCheckbox" class="checkbox">
             <label>
-                <input type="checkbox" name="${inputTextDirectiveCtrl.formName}" ng-model="Ctrl.model" ng-required="Ctrl.required" /> {{Ctrl.label}} 
+                <input type="checkbox" name="${InputCtrl.formName}" ng-model="Ctrl.model" ng-required="Ctrl.required" /> {{Ctrl.label}} 
                 <span ng-if="Ctrl.hasFeedbackIcon">
                     <i class="glyphicon" ng-class="{'glyphicon-ok':Ctrl.hasSuccessClass,'glyphicon-asterisk':Ctrl.hasRequiredIcon,'glyphicon-warning-sign':Ctrl.hasWarnigClass}"></i>
                 </span>
@@ -28,10 +213,10 @@
          
             <div ng-class="{'input-group':Ctrl.hasAnyAddon}">
                 <span class="input-group-addon" ng-if="Ctrl.hasAddonLeft">{{Ctrl.addonLeft}}</span>
-                <input ng-if="!Ctrl.multiline && !Ctrl.IsInputFile && !Ctrl.IsSelect"  ng-attr-type="{{Ctrl.type}}" ng-model="Ctrl.model" class="form-control" name="${inputTextDirectiveCtrl.fieldName}" ng-attr-maxlength="{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}" ng-attr-pattern="{{Ctrl.hasPattern?Ctrl.pattern:undefined}}" ng-required="Ctrl.required" ng-attr-placeholder="{{Ctrl.placeholder?Ctrl.placeholder:undefined}}" ng-attr-min="{{Ctrl.minMaxEnabled && Ctrl.min ?Ctrl.min:undefined}}"  ng-attr-max="{{Ctrl.minMaxEnabled && Ctrl.max ? Ctrl.max:undefined}}" />
-                <input type="file" class="form-control" name="${inputTextDirectiveCtrl.fieldName}" ng-model="Ctrl.model" ng-if="Ctrl.IsInputFile" fileread="Ctrl.model" filename="Ctrl.filename"  ng-required="Ctrl.required" />
-                <textarea ng-if="Ctrl.multiline" ng-model="Ctrl.model" class="form-control" name="${inputTextDirectiveCtrl.fieldName}" ng-attr-maxlength="{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}" ng-attr-pattern="{{Ctrl.hasPattern?Ctrl.pattern:undefined}}" ng-required="Ctrl.required" ng-attr-placeholder="{{Ctrl.placeholder?Ctrl.placeholder:undefined}}" ></textarea>
-                <select name="${inputTextDirectiveCtrl.fieldName}" class="form-control" ng-if="Ctrl.IsSelect" ng-options="{{Ctrl.optionsExpression}}" ng-model="Ctrl.model"  ng-required="Ctrl.required">
+                <input ng-if="!Ctrl.multiline && !Ctrl.IsInputFile && !Ctrl.IsSelect"  ng-attr-type="{{Ctrl.type}}" ng-model="Ctrl.model" class="form-control" name="${InputCtrl.fieldName}" ng-attr-maxlength="{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}" ng-attr-pattern="{{Ctrl.hasPattern?Ctrl.pattern:undefined}}" ng-required="Ctrl.required" ng-attr-placeholder="{{Ctrl.placeholder?Ctrl.placeholder:undefined}}" ng-attr-min="{{Ctrl.minMaxEnabled && Ctrl.min ?Ctrl.min:undefined}}"  ng-attr-max="{{Ctrl.minMaxEnabled && Ctrl.max ? Ctrl.max:undefined}}" />
+                <input type="file" class="form-control" name="${InputCtrl.fieldName}" ng-model="Ctrl.model" ng-if="Ctrl.IsInputFile" fileread="Ctrl.model" filename="Ctrl.filename"  ng-required="Ctrl.required" />
+                <textarea ng-if="Ctrl.multiline" ng-model="Ctrl.model" class="form-control" name="${InputCtrl.fieldName}" ng-attr-maxlength="{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}" ng-attr-pattern="{{Ctrl.hasPattern?Ctrl.pattern:undefined}}" ng-required="Ctrl.required" ng-attr-placeholder="{{Ctrl.placeholder?Ctrl.placeholder:undefined}}" ></textarea>
+                <select name="${InputCtrl.fieldName}" class="form-control" ng-if="Ctrl.IsSelect" ng-options="{{Ctrl.optionsExpression}}" ng-model="Ctrl.model"  ng-required="Ctrl.required">
                 </select>
                 <span class="input-group-addon" ng-if="Ctrl.hasAddonRight">{{Ctrl.addonRight}}</span>
             </div>
@@ -43,11 +228,11 @@
              <span class="glyphicon glyphicon-warning-sign form-control-feedback" ng-if="Ctrl.hasWarnigClass" aria-hidden="true"></span>
         </div>
 
-        <p class="help-block" ng-show="${inputTextDirectiveCtrl.formName}.${inputTextDirectiveCtrl.fieldName}.$dirty && ${inputTextDirectiveCtrl.formName}.${inputTextDirectiveCtrl.fieldName}.$invalid">
-            <span ng-if="${inputTextDirectiveCtrl.formName}.${inputTextDirectiveCtrl.fieldName}.$error.required">{{Ctrl.requiredText}}</span>
-            <span ng-if="${inputTextDirectiveCtrl.formName}.${inputTextDirectiveCtrl.fieldName}.$error.pattern">{{Ctrl.patternText}}</span>
-            <span ng-if="${inputTextDirectiveCtrl.formName}.${inputTextDirectiveCtrl.fieldName}.$error.min">Valore minimo: {{Ctrl.min}}</span>
-            <span ng-if="${inputTextDirectiveCtrl.formName}.${inputTextDirectiveCtrl.fieldName}.$error.max">Valore massimo: {{Ctrl.max}}</span>
+        <p class="help-block" ng-show="${InputCtrl.formName}.${InputCtrl.fieldName}.$dirty && ${InputCtrl.formName}.${InputCtrl.fieldName}.$invalid">
+            <span ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.required">{{Ctrl.requiredText}}</span>
+            <span ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.pattern">{{Ctrl.patternText}}</span>
+            <span ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.min">Valore minimo: {{Ctrl.min}}</span>
+            <span ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.max">Valore massimo: {{Ctrl.max}}</span>
         </p>
         <p class="help-block" ng-if="Ctrl.hasHelpText">{{Ctrl.helpText}}</p>
 
@@ -64,16 +249,16 @@
                 static $inject = ["$scope"];
                 constructor(...args) {
                     this.args = args;
-                    //console.log(inputTextDirectiveCtrl.template);
+                    //console.log(inputCtrl.template);
                 }
                 get $scope(): angular.IScope {
                     return this.args[0];
                 }
                 get $form(): angular.IFormController {
-                    return this.$scope[inputTextDirectiveCtrl.formName] || null;
+                    return this.$scope[InputCtrl.formName] || null;
                 }
                 get field(): angular.INgModelController {
-                    return this.$form[inputTextDirectiveCtrl.fieldName] || null;
+                    return this.$form[InputCtrl.fieldName] || null;
                 }
                 get ready(): boolean {
                     return true && this.$form != null && this.field != null;
@@ -140,7 +325,7 @@
                     this.$scope["filename"] = x;
                 }
                 get required() {
-                    return true && this.$scope.hasOwnProperty("required");
+                    return true && this.$scope.hasOwnProperty("required") && this.$scope["required"];
                 }
                 get type() {
                     return this.$scope["type"] || "text";
@@ -231,17 +416,17 @@
                     return this.$scope["optionsGroup"] || null;
                 }
                 get optionsExpression() {
-                    return "item[Ctrl.optionsValue] as item[Ctrl.optionsLabel] " + (this.optionsGroup != null ? "group by item[Ctrl.optionsGroup] " : "") + "for item in Ctrl.options"
+                    return `item[Ctrl.optionsValue] as item[Ctrl.optionsLabel] ${this.optionsGroup != null ? "group by item[Ctrl.optionsGroup] " : ""}for item in Ctrl.options`
                 }
                 get autocomplete() {
                     return this.$scope["autocomplete"] ? this.$scope["autocomplete"] : false;
                 }
                 static Directive() {
                     return <angular.IDirective>{
-                        controller: inputTextDirectiveCtrl,
+                        controller: InputCtrl,
                         controllerAs: "Ctrl",
                         replace: true,
-                        template: inputTextDirectiveCtrl.template,
+                        template: InputCtrl.template,
                         scope: {
                             auInput: "=",
                             required: "=?",
@@ -269,182 +454,28 @@
                 }
             }
 
-            export class ActionButtonConfig {
-
-                getErrors: { (q: angular.IDeferred<string[]>, resp: any): void } = ($q, resp) => {
-                    $q.resolve(["An error occurred"]);
-                }
-
-
-            }
-            export class actionButton {
-
-                args: any[] = [];
-                static $inject = ["$scope", "$timeout", "$element","actionButtonConfig"];
-                constructor(...args) {
-                    this.args = args;
-
-                }
-
-
-
-
-                static template = `
-            
-            <button ng-disabled="!Ctrl.enabled" ng-click="Ctrl.Click()" class="btn {{Ctrl.type}}">
-                    <i class="fa fa-spin fa-spinner" ng-show="Ctrl.running"></i>
-                    <i class="fa fa-check" ng-show="Ctrl.done"></i>
-                    <i class="fa fa-times" ng-show="Ctrl.error"></i>
-                 {{Ctrl.text}}
-            </button>
-
-
-`;
-                get $actionButtonConfig(): angularUtils.directive.input.ActionButtonConfig {
-                    return this.args[3];
-                }
-                get $scope(): angular.IScope {
-                    return this.args[0];
-                }
-                get $element(): JQuery {
-                    return $(this.args[2]);
-                } 
-                get $timeout(): angular.ITimeoutService {
-                    return this.args[1];
-                }
-                get form(): angular.IFormController {
-                    return this.$scope["form"] || null;
-                }
-                get hasForm() {
-                    return this.form != null;
-                }
-                get text(): string {
-                    return this.$scope["text"] || null;
-                }
-                get enabled() {
-                    return !this.running && ((this.hasForm && this.form.$valid) || !this.hasForm);
-                }
-                get action() {
-                    return this.$scope["action"] || (() => null);
-                }
-                get time(): number {
-                    return this.$scope["time"] || 3000;
-                }
-                get type() {
-                    return this.$scope["type"] || "btn-primary"
-                }
-                get confirm() {
-                    return this.$scope["confirm"] || null;
-                }
-                running = false;
-                done: boolean = false;
-                error: boolean = false;
-                Click() {
-                    if (this.hasForm && this.form.$invalid) return;
-
-
-                    this.$element.popover("destroy");
-                    if (this.confirm && !confirm(this.confirm)) return;
-
-                    var action = this.action;
-
-                    this.running = true;
-                    var p = action();
-                    if (!p) {
-                        this.running = false;
-                    }
-                    //se ritorna una promise
-                    if (p && [p.finally, p.then, p.catch].every(x=> x instanceof Function)) {
-
-
-                        (<angular.IPromise<any>>p).finally(() => {
-                            this.running = false;
-                        }).then(() => {
-
-                            this.done = true;
-
-                            this.$timeout(() => {
-                                this.done = false;
-                            }, this.time);
-
-                        }).catch((r) => {
-                            this.error = true;
-
-                            this.$timeout(() => {
-                                this.error = false;
-                            }, this.time);
-
-
-                            if (!(r.data.Messages && r.data.Messages instanceof Array)) return;
-
-
-
-
-
-                            this.$element.popover({
-
-                                content: () => {
-                                    var ul = $("<ul/>");
-
-                                    (<string[]>r.data.Messages).forEach(message => {
-                                        $("<li/>").text(message).appendTo(ul)
-                                    });
-                                    var d = $("<div/>");
-                                    d.addClass("text-danger").append(ul);
-                                    return d;
-                                },
-                                html: true,
-                                placement: "top",
-                                title: "Si sono verificati alcuni errori"
-
-                            }).popover('show');
-
-
-
-
-
-                        });
-                    }
-                    else this.running = true;
-                }
-                static Directive() {
-                    return <angular.IDirective>{
-                        controller: actionButton,
-                        controllerAs: "Ctrl",
-                        replace: true,
-                        template: actionButton.template,
-                        scope: {
-                            action: "&",
-                            form: "=",
-                            text: "=",
-                            type: "=?",
-                            debug: "=?",
-                            confirm: "=?"
-                        }
-                    };
-                }
-            }
+          
         }
-    }
+    
 }
 
 (() => {
 
     angular.module("angularUtils", [])
-        .directive("auInput", angularUtils.directive.input.inputTextDirectiveCtrl.Directive)
-        .service("actionButtonConfig", angularUtils.directive.input.ActionButtonConfig)
-        .directive("auButton", angularUtils.directive.input.actionButton.Directive)
+        .directive("auInput", Au.Input.InputCtrl.Directive)
+        .service("auButtonConfig", Au.Button.ActionButtonConfig)
+        .directive("auButton", Au.Button.ActionButtonCtrl.Directive)
         .directive("fileread", ["$timeout", ($timeout: angular.ITimeoutService) => {
             //http://stackoverflow.com/questions/17063000/ng-model-for-input-type-file
             return <angular.IDirective>{
                 restrict: "A",
-                require: 'ngModel',
+                require: "ngModel",
                 scope: {
                     fileread: "=",
                     filename: "=?"
                 },
                 link: (scope, element: angular.IAugmentedJQuery, attributes, ngModel: angular.INgModelController) => {
-                    //console.log(ngModel);
+                    
 
                     var oldPristine = ngModel.$setPristine;
                     ngModel.$setPristine = () => {
@@ -452,7 +483,6 @@
                         oldPristine();
                     };
                     element.on("change", (changeEvent) => {
-                        var inputName = element.attr("name");
                         ngModel.$setDirty();
 
 
@@ -466,7 +496,8 @@
 
                                 scope.fileread = null;
                                 scope.filename = null;
-                            })
+                            });
+
                             return;
                         }
 

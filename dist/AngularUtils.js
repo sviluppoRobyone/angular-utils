@@ -9,9 +9,12 @@ var Au;
             if (response.data.ModelState) {
                 var errors = [];
                 for (var k in response.data.ModelState) {
-                    response.data.ModelState[k].forEach(function (e) {
-                        errors.push(k + ": " + e);
-                    });
+                    if (response.data.ModelState.hasOwnProperty(k) && response.data.ModelState[k] instanceof Array) {
+                        var prepend = ((typeof k == typeof "") && k.length > 0) ? k + ": " : "";
+                        response.data.ModelState[k].forEach(function (e) {
+                            errors.push(prepend + e);
+                        });
+                    }
                 }
                 promise.resolve(errors);
             }

@@ -1,4 +1,5 @@
 declare module Au {
+    var moduleName: string;
     module Errors {
         import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
         interface IGetErrors<T> {
@@ -17,10 +18,12 @@ declare module Au {
     }
     module Button {
         class ActionButtonConfig {
+            static serviceName: string;
             getErrors: Errors.IGetErrors<any>;
         }
         class ActionButtonCtrl {
-            args: any[];
+            static directiveName: string;
+            private args;
             static $inject: string[];
             constructor(...args: any[]);
             static template: string;
@@ -41,16 +44,18 @@ declare module Au {
             done: boolean;
             error: boolean;
             Click(): void;
-            static Directive(): ng.IDirective;
+            static directive(): ng.IDirective;
         }
     }
     module Input {
         class InputCtrl {
+            static directiveName: string;
             static fieldName: string;
             static formName: string;
             static template: string;
-            args: any[];
+            private args;
             static $inject: string[];
+            private directiveInfo;
             constructor(...args: any[]);
             $scope: angular.IScope;
             $form: angular.IFormController;
@@ -121,7 +126,7 @@ declare module Au {
             optionsGroup: any;
             optionsExpression: string;
             autocomplete: any;
-            static Directive(): ng.IDirective;
+            static directive(): ng.IDirective;
         }
     }
 }

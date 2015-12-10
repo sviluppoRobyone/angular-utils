@@ -1,5 +1,6 @@
 var Au;
 (function (Au) {
+    Au.moduleName = "angularUtils";
     var Errors;
     (function (Errors) {
         Errors.defaultError = function (promise, resp) {
@@ -26,6 +27,7 @@ var Au;
             function ActionButtonConfig() {
                 this.getErrors = Errors.defaultError;
             }
+            ActionButtonConfig.serviceName = "auButtonConfig";
             return ActionButtonConfig;
         })();
         Button.ActionButtonConfig = ActionButtonConfig;
@@ -139,12 +141,8 @@ var Au;
                 this.$element.popover("destroy");
                 if (this.confirm && !confirm(this.confirm))
                     return;
-                var action = this.action;
                 this.running = true;
-                var p = action();
-                if (!p) {
-                    this.running = false;
-                }
+                var p = this.action();
                 //se ritorna una promise
                 if (p && [p.finally, p.then, p.catch].every(function (x) { return x instanceof Function; })) {
                     p.finally(function () {
@@ -180,9 +178,9 @@ var Au;
                     });
                 }
                 else
-                    this.running = true;
+                    this.running = false;
             };
-            ActionButtonCtrl.Directive = function () {
+            ActionButtonCtrl.directive = function () {
                 return {
                     controller: ActionButtonCtrl,
                     controllerAs: "Ctrl",
@@ -198,6 +196,7 @@ var Au;
                     }
                 };
             };
+            ActionButtonCtrl.directiveName = "auButton";
             ActionButtonCtrl.$inject = ["$scope", "$timeout", "$element", "auButtonConfig", "$q"];
             ActionButtonCtrl.template = "\n            \n            <button ng-disabled=\"!Ctrl.enabled\" ng-click=\"Ctrl.Click()\" class=\"btn {{Ctrl.type}}\">\n                    <i class=\"fa fa-spin fa-spinner\" ng-show=\"Ctrl.running\"></i>\n                    <i class=\"fa fa-check\" ng-show=\"Ctrl.done\"></i>\n                    <i class=\"fa fa-times\" ng-show=\"Ctrl.error\"></i>\n                 {{Ctrl.text}}\n            </button>\n\n\n";
             return ActionButtonCtrl;
@@ -213,8 +212,9 @@ var Au;
                     args[_i - 0] = arguments[_i];
                 }
                 this.args = [];
+                this.directiveInfo = null;
                 this.args = args;
-                //console.log(inputCtrl.template);
+                this.directiveInfo = InputCtrl.directive();
             }
             Object.defineProperty(InputCtrl.prototype, "$scope", {
                 get: function () {
@@ -331,10 +331,10 @@ var Au;
             });
             Object.defineProperty(InputCtrl.prototype, "model", {
                 get: function () {
-                    return this.$scope["auInput"];
+                    return this.$scope[InputCtrl.directiveName];
                 },
                 set: function (x) {
-                    this.$scope["auInput"] = x;
+                    this.$scope[InputCtrl.directiveName] = x;
                 },
                 enumerable: true,
                 configurable: true
@@ -428,7 +428,7 @@ var Au;
             });
             Object.defineProperty(InputCtrl.prototype, "multiline", {
                 get: function () {
-                    return this.type && this.type == "textarea";
+                    return this.type && this.type === "textarea";
                 },
                 enumerable: true,
                 configurable: true
@@ -561,7 +561,7 @@ var Au;
             });
             Object.defineProperty(InputCtrl.prototype, "optionsExpression", {
                 get: function () {
-                    return "item[Ctrl.optionsValue] as item[Ctrl.optionsLabel] " + (this.optionsGroup != null ? "group by item[Ctrl.optionsGroup] " : "") + "for item in Ctrl.options";
+                    return "item[" + this.directiveInfo.controllerAs + ".optionsValue] as item[" + this.directiveInfo.controllerAs + ".optionsLabel] " + (this.optionsGroup != null ? "group by item[" + this.directiveInfo.controllerAs + ".optionsGroup] " : "") + "for item in " + this.directiveInfo.controllerAs + ".options";
                 },
                 enumerable: true,
                 configurable: true
@@ -573,7 +573,7 @@ var Au;
                 enumerable: true,
                 configurable: true
             });
-            InputCtrl.Directive = function () {
+            InputCtrl.directive = function () {
                 return {
                     controller: InputCtrl,
                     controllerAs: "Ctrl",
@@ -604,6 +604,7 @@ var Au;
                     }
                 };
             };
+            InputCtrl.directiveName = "auInput";
             InputCtrl.fieldName = "field";
             InputCtrl.formName = "fit";
             InputCtrl.template = "\n\n<div class=\"input-text\" ng-form=\"" + InputCtrl.formName + "\" ng-class=\"{'well well-sm':Ctrl.debug}\">\n    <div class=\"form-group\" ng-class=\"{'has-error':Ctrl.hasErrorClass,'has-success':Ctrl.hasSuccessClass,'has-feedback':Ctrl.hasFeedbackIcon,'has-warning':Ctrl.hasWarnigClass}\">\n        \n        <div ng-if=\"Ctrl.IsInputCheckbox\" class=\"checkbox\">\n            <label>\n                <input type=\"checkbox\" name=\"" + InputCtrl.formName + "\" ng-model=\"Ctrl.model\" ng-required=\"Ctrl.required\" /> {{Ctrl.label}} \n                <span ng-if=\"Ctrl.hasFeedbackIcon\">\n                    <i class=\"glyphicon\" ng-class=\"{'glyphicon-ok':Ctrl.hasSuccessClass,'glyphicon-asterisk':Ctrl.hasRequiredIcon,'glyphicon-warning-sign':Ctrl.hasWarnigClass}\"></i>\n                </span>\n            </label>\n\n        </div>\n        <div ng-if=\"!Ctrl.IsInputCheckbox\">      \n\n       \n            <label class=\"control-label\" ng-if=\"Ctrl.hasLabel\">{{Ctrl.label}}</label>\n         \n            <div ng-class=\"{'input-group':Ctrl.hasAnyAddon}\">\n                <span class=\"input-group-addon\" ng-if=\"Ctrl.hasAddonLeft\">{{Ctrl.addonLeft}}</span>\n                <input ng-if=\"!Ctrl.multiline && !Ctrl.IsInputFile && !Ctrl.IsSelect\"  ng-attr-type=\"{{Ctrl.type}}\" ng-model=\"Ctrl.model\" class=\"form-control\" name=\"" + InputCtrl.fieldName + "\" ng-attr-maxlength=\"{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}\" ng-attr-pattern=\"{{Ctrl.hasPattern?Ctrl.pattern:undefined}}\" ng-required=\"Ctrl.required\" ng-attr-placeholder=\"{{Ctrl.placeholder?Ctrl.placeholder:undefined}}\" ng-attr-min=\"{{Ctrl.minMaxEnabled && Ctrl.min ?Ctrl.min:undefined}}\"  ng-attr-max=\"{{Ctrl.minMaxEnabled && Ctrl.max ? Ctrl.max:undefined}}\" />\n                <input type=\"file\" class=\"form-control\" name=\"" + InputCtrl.fieldName + "\" ng-model=\"Ctrl.model\" ng-if=\"Ctrl.IsInputFile\" fileread=\"Ctrl.model\" filename=\"Ctrl.filename\"  ng-required=\"Ctrl.required\" />\n                <textarea ng-if=\"Ctrl.multiline\" ng-model=\"Ctrl.model\" class=\"form-control\" name=\"" + InputCtrl.fieldName + "\" ng-attr-maxlength=\"{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}\" ng-attr-pattern=\"{{Ctrl.hasPattern?Ctrl.pattern:undefined}}\" ng-required=\"Ctrl.required\" ng-attr-placeholder=\"{{Ctrl.placeholder?Ctrl.placeholder:undefined}}\" ></textarea>\n                <select name=\"" + InputCtrl.fieldName + "\" class=\"form-control\" ng-if=\"Ctrl.IsSelect\" ng-options=\"{{Ctrl.optionsExpression}}\" ng-model=\"Ctrl.model\"  ng-required=\"Ctrl.required\">\n                </select>\n                <span class=\"input-group-addon\" ng-if=\"Ctrl.hasAddonRight\">{{Ctrl.addonRight}}</span>\n            </div>\n\n            <span title=\"Campo Richiesto\" class=\"glyphicon glyphicon-asterisk form-control-feedback\" ng-if=\"Ctrl.hasRequiredIcon\" aria-hidden=\"true\"></span>\n            <span class=\"glyphicon glyphicon-ok form-control-feedback\" ng-if=\"Ctrl.hasSuccessClass\" aria-hidden=\"true\"></span>\n\n\n             <span class=\"glyphicon glyphicon-warning-sign form-control-feedback\" ng-if=\"Ctrl.hasWarnigClass\" aria-hidden=\"true\"></span>\n        </div>\n\n        <p class=\"help-block\" ng-show=\"" + InputCtrl.formName + "." + InputCtrl.fieldName + ".$dirty && " + InputCtrl.formName + "." + InputCtrl.fieldName + ".$invalid\">\n            <span ng-if=\"" + InputCtrl.formName + "." + InputCtrl.fieldName + ".$error.required\">{{Ctrl.requiredText}}</span>\n            <span ng-if=\"" + InputCtrl.formName + "." + InputCtrl.fieldName + ".$error.pattern\">{{Ctrl.patternText}}</span>\n            <span ng-if=\"" + InputCtrl.formName + "." + InputCtrl.fieldName + ".$error.min\">Valore minimo: {{Ctrl.min}}</span>\n            <span ng-if=\"" + InputCtrl.formName + "." + InputCtrl.fieldName + ".$error.max\">Valore massimo: {{Ctrl.max}}</span>\n        </p>\n        <p class=\"help-block\" ng-if=\"Ctrl.hasHelpText\">{{Ctrl.helpText}}</p>\n\n    </div>\n   \n    <pre ng-if=\"Ctrl.debug\" class=\"pre-scrollable\">{{Ctrl.json|json}}</pre>\n</div>\n\n\n\n";
@@ -614,10 +615,10 @@ var Au;
     })(Input = Au.Input || (Au.Input = {}));
 })(Au || (Au = {}));
 (function () {
-    angular.module("angularUtils", [])
-        .directive("auInput", Au.Input.InputCtrl.Directive)
-        .service("auButtonConfig", Au.Button.ActionButtonConfig)
-        .directive("auButton", Au.Button.ActionButtonCtrl.Directive)
+    angular.module(Au.moduleName, [])
+        .directive(Au.Input.InputCtrl.directiveName, Au.Input.InputCtrl.directive)
+        .service(Au.Button.ActionButtonConfig.serviceName, Au.Button.ActionButtonConfig)
+        .directive(Au.Button.ActionButtonCtrl.directiveName, Au.Button.ActionButtonCtrl.directive)
         .directive("fileread", ["$timeout", function ($timeout) {
             //http://stackoverflow.com/questions/17063000/ng-model-for-input-type-file
             return {

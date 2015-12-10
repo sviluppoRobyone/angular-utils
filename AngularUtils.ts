@@ -1,4 +1,5 @@
 ﻿module Au {
+    export var moduleName = "angularUtils";
     export module Errors {
         import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
 
@@ -38,14 +39,14 @@
            
 
             export class ActionButtonConfig {
-             
+                static serviceName="auButtonConfig";
                 getErrors: Errors.IGetErrors<any> =  Errors.defaultError;
 
 
             }
             export class ActionButtonCtrl {
-
-                args: any[] = [];
+                static directiveName="auButton";
+                private args: any[] = [];
                 static $inject = ["$scope", "$timeout", "$element", "auButtonConfig","$q"];
                 constructor(...args) {
                     this.args = args;
@@ -115,13 +116,11 @@
                     this.$element.popover("destroy");
                     if (this.confirm && !confirm(this.confirm)) return;
 
-                    var action = this.action;
+              
 
                     this.running = true;
-                    var p = action();
-                    if (!p) {
-                        this.running = false;
-                    }
+                    const p = this.action();
+                  
                     //se ritorna una promise
                     if (p && [p.finally, p.then, p.catch].every(x=> x instanceof Function)) {
 
@@ -170,9 +169,9 @@
 
                         });
                     }
-                    else this.running = true;
+                    else this.running = false;
                 }
-                static Directive() {
+                static directive() {
                     return <angular.IDirective>{
                         controller: ActionButtonCtrl,
                         controllerAs: "Ctrl",
@@ -194,7 +193,7 @@
 
             
             export class InputCtrl {
-
+                static directiveName="auInput";
                 static fieldName = "field";
                 static formName = "fit";
                 static template = `
@@ -250,11 +249,12 @@
 
 `;
 
-                args: any[] = [];
+                private  args: any[] = [];
                 static $inject = ["$scope"];
+                private directiveInfo:angular.IDirective=null;
                 constructor(...args) {
                     this.args = args;
-                    //console.log(inputCtrl.template);
+                    this.directiveInfo = InputCtrl.directive();
                 }
                 get $scope(): angular.IScope {
                     return this.args[0];
@@ -318,10 +318,10 @@
                     return this.label != null;
                 }
                 get model() {
-                    return this.$scope["auInput"];
+                    return this.$scope[InputCtrl.directiveName];
                 }
                 set model(x) {
-                    this.$scope["auInput"] = x;
+                    this.$scope[InputCtrl.directiveName] = x;
                 }
                 get filename() {
                     return this.$scope["filename"];
@@ -364,7 +364,7 @@
                     return this.$scope["placeholder"] || null;
                 }
                 get multiline() {
-                    return this.type && this.type == "textarea";
+                    return this.type && this.type === "textarea";
                 }
                 get debug() {
                     return this.$scope.hasOwnProperty("debug");
@@ -421,12 +421,13 @@
                     return this.$scope["optionsGroup"] || null;
                 }
                 get optionsExpression() {
-                    return `item[Ctrl.optionsValue] as item[Ctrl.optionsLabel] ${this.optionsGroup != null ? "group by item[Ctrl.optionsGroup] " : ""}for item in Ctrl.options`
+                    return `item[${this.directiveInfo.controllerAs}.optionsValue] as item[${this.directiveInfo.controllerAs}.optionsLabel] ${this.optionsGroup != null ? `group by item[${this.directiveInfo.controllerAs}.optionsGroup] ` : ""}for item in ${this.directiveInfo.controllerAs}.options`
                 }
                 get autocomplete() {
                     return this.$scope["autocomplete"] ? this.$scope["autocomplete"] : false;
                 }
-                static Directive() {
+
+                static directive() {
                     return <angular.IDirective>{
                         controller: InputCtrl,
                         controllerAs: "Ctrl",
@@ -466,10 +467,10 @@
 
 (() => {
 
-    angular.module("angularUtils", [])
-        .directive("auInput", Au.Input.InputCtrl.Directive)
-        .service("auButtonConfig", Au.Button.ActionButtonConfig)
-        .directive("auButton", Au.Button.ActionButtonCtrl.Directive)
+    angular.module(Au.moduleName, [])
+        .directive(Au.Input.InputCtrl.directiveName, Au.Input.InputCtrl.directive)
+        .service(Au.Button.ActionButtonConfig.serviceName, Au.Button.ActionButtonConfig)
+        .directive(Au.Button.ActionButtonCtrl.directiveName, Au.Button.ActionButtonCtrl.directive)
         .directive("fileread", ["$timeout", ($timeout: angular.ITimeoutService) => {
             //http://stackoverflow.com/questions/17063000/ng-model-for-input-type-file
             return <angular.IDirective>{

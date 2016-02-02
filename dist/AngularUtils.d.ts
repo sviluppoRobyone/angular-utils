@@ -2,27 +2,23 @@ declare module Au {
     var moduleName: string;
     module Http {
         class HttpEvents implements angular.IHttpInterceptor {
-            static $inject: string[];
-            private args;
             static InterceptorName: string;
             static EventProgress: string;
             static EventFinish: string;
             $q: angular.IQService;
             $rootScope: angular.IRootScopeService;
             $log: angular.ILogService;
-            $injector: angular.auto.IInjectorService;
-            constructor(...args: any[]);
+            private $injector;
+            constructor($injector: angular.auto.IInjectorService);
             private loadingCount;
             request: (config: any) => any;
             response: (response: any) => any;
             responseError: (response: any) => ng.IPromise<any>;
-            static Factory: angular.IHttpInterceptorFactory;
         }
         class HttpEventsConfig {
-            static $inject: string[];
-            private args;
-            $httpProvider: angular.IHttpProvider;
-            constructor(...args: any[]);
+            private $injector;
+            private $httpProvider;
+            constructor($injector: angular.auto.IInjectorService);
             Init(): void;
         }
         class ToggleOnHttpActivity {

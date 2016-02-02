@@ -7,49 +7,45 @@ var Au;
         //http://stackoverflow.com/questions/23361883/angular-js-detect-when-all-http-have-finished
         //https://gist.github.com/abhijeetd/0686edcca2aeb0fc8b38
         var HttpEvents = (function () {
-            function HttpEvents() {
+            function HttpEvents($injector) {
                 var _this = this;
-                var args = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i - 0] = arguments[_i];
-                }
-                this.args = [];
+                this.$injector = null;
                 this.loadingCount = 0;
                 this.request = function (config) {
-                    _this.$log.info("get new request");
+                    //this.$log.info("get new request");
                     if (++_this.loadingCount === 1) {
-                        _this.$log.info("Trigger loading progress");
+                        // this.$log.info("Trigger loading progress");
                         _this.$rootScope.$broadcast(HttpEvents.EventProgress);
                     }
                     return config || _this.$q.when(config);
                 };
                 this.response = function (response) {
-                    _this.$log.info("get new response");
+                    //this.$log.info("get new response");
                     if (--_this.loadingCount === 0) {
-                        _this.$log.info("Trigger loading progress");
+                        //this.$log.info("Trigger loading progress");
                         _this.$rootScope.$broadcast(HttpEvents.EventFinish);
                     }
                     return response || _this.$q.when(response);
                 };
                 this.responseError = function (response) {
-                    _this.$log.info("get new response error");
+                    //  this.$log.info("get new response error");
                     if (_this.loadingCount === 0) {
-                        _this.$log.info("Trigger loading finish");
+                        //this.$log.info("Trigger loading finish");
                         _this.$rootScope.$broadcast(HttpEvents.EventFinish);
                     }
                     return _this.$q.reject(response);
                 };
-                this.args = args;
-                this.$rootScope.$on(HttpEvents.EventProgress, function () {
-                    _this.$log.info("Detect loading progress");
-                });
-                this.$rootScope.$on(HttpEvents.EventFinish, function () {
-                    _this.$log.info("Detect loading finish");
-                });
+                this.$injector = $injector;
+                //this.$rootScope.$on(HttpEvents.EventProgress, () => {
+                //    this.$log.info("Detect loading progress");
+                //});
+                //this.$rootScope.$on(HttpEvents.EventFinish, () => {
+                //    this.$log.info("Detect loading finish");
+                //});
             }
             Object.defineProperty(HttpEvents.prototype, "$q", {
                 get: function () {
-                    return this.args[0];
+                    return this.$injector.get("$q");
                 },
                 enumerable: true,
                 configurable: true
@@ -68,54 +64,21 @@ var Au;
                 enumerable: true,
                 configurable: true
             });
-            Object.defineProperty(HttpEvents.prototype, "$injector", {
-                get: function () {
-                    return this.args[1];
-                },
-                enumerable: true,
-                configurable: true
-            });
-            HttpEvents.$inject = ["$q", "$injector"];
-            HttpEvents.InterceptorName = "HttpEventInterceptor";
+            HttpEvents.InterceptorName = "httpEventInterceptor";
             HttpEvents.EventProgress = "loading:progress";
             HttpEvents.EventFinish = "loading:finish";
-            HttpEvents.Factory = function () {
-                var args = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i - 0] = arguments[_i];
-                }
-                var x = new (HttpEvents.bind.apply(HttpEvents, [void 0].concat(args)))();
-                var myStupidObject = {};
-                var theStupidMethods = ["request", "requestError", "response", "responseError"];
-                theStupidMethods.forEach(function (methodName) {
-                    if (x[methodName]) {
-                        myStupidObject[methodName] = function () {
-                            var aaaaaaa = [];
-                            for (var _i = 0; _i < arguments.length; _i++) {
-                                aaaaaaa[_i - 0] = arguments[_i];
-                            }
-                            return x[methodName].apply(x, aaaaaaa);
-                        };
-                    }
-                });
-                console.log(myStupidObject);
-                return myStupidObject;
-            };
             return HttpEvents;
         })();
         Http.HttpEvents = HttpEvents;
         var HttpEventsConfig = (function () {
-            function HttpEventsConfig() {
-                var args = [];
-                for (var _i = 0; _i < arguments.length; _i++) {
-                    args[_i - 0] = arguments[_i];
-                }
-                this.args = [];
-                this.args = args;
+            function HttpEventsConfig($injector) {
+                this.$injector = null;
+                this.$injector = $injector;
+                this.Init();
             }
             Object.defineProperty(HttpEventsConfig.prototype, "$httpProvider", {
                 get: function () {
-                    return this.args[0];
+                    return this.$injector.get("$httpProvider");
                 },
                 enumerable: true,
                 configurable: true
@@ -123,7 +86,6 @@ var Au;
             HttpEventsConfig.prototype.Init = function () {
                 this.$httpProvider.interceptors.push(HttpEvents.InterceptorName);
             };
-            HttpEventsConfig.$inject = ["$httpProvider"];
             return HttpEventsConfig;
         })();
         Http.HttpEventsConfig = HttpEventsConfig;
@@ -769,8 +731,12 @@ var Au;
 })(Au || (Au = {}));
 (function () {
     angular.module(Au.moduleName, [])
-        .factory(Au.Http.HttpEvents.InterceptorName, Au.Http.HttpEvents.Factory)
-        .config(Au.Http.HttpEventsConfig)
+        .factory(Au.Http.HttpEvents.InterceptorName, ["$injector", function ($injector) {
+            return new Au.Http.HttpEvents($injector);
+        }])
+        .config(["$injector", function ($injector) {
+            new Au.Http.HttpEventsConfig($injector);
+        }])
         .directive(Au.Http.ToggleOnHttpActivity.DirectiveName, Au.Http.ToggleOnHttpActivity.Directive)
         .directive(Au.Input.InputCtrl.directiveName, Au.Input.InputCtrl.directive)
         .service(Au.Button.ActionButtonConfig.serviceName, Au.Button.ActionButtonConfig)

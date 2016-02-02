@@ -6,94 +6,79 @@
         //https://gist.github.com/abhijeetd/0686edcca2aeb0fc8b38
 
         export class HttpEvents implements angular.IHttpInterceptor {
-            static $inject = ["$q","$injector"];
-            private args: any[] = [];
-            static InterceptorName = "HttpEventInterceptor";
+      
+            static InterceptorName = "httpEventInterceptor";
             static EventProgress="loading:progress";
             static EventFinish="loading:finish";
            
 
             get $q(): angular.IQService {
-                return this.args[0];
+                return this.$injector.get<angular.IQService>("$q");
             }
-
             get $rootScope(): angular.IRootScopeService {
                 return this.$injector.get<angular.IRootScopeService>("$rootScope");
             }
             get $log() :angular.ILogService {
                 return this.$injector.get<angular.ILogService>("$log");
             }
-            get $injector(): angular.auto.IInjectorService {
-                return this.args[1];
-            }
-            constructor(...args) {
-                this.args = args;
+            private $injector: angular.auto.IInjectorService = null;
 
-                this.$rootScope.$on(HttpEvents.EventProgress, () => {
-                    this.$log.info("Detect loading progress");
-                });
+            constructor($injector: angular.auto.IInjectorService) {
+                this.$injector = $injector;
 
-                this.$rootScope.$on(HttpEvents.EventFinish, () => {
-                    this.$log.info("Detect loading finish");
-                });
+                //this.$rootScope.$on(HttpEvents.EventProgress, () => {
+                //    this.$log.info("Detect loading progress");
+                //});
+
+                //this.$rootScope.$on(HttpEvents.EventFinish, () => {
+                //    this.$log.info("Detect loading finish");
+                //});
             }
 
             
 
             private loadingCount :number=0;
             public request = (config) => {
-                this.$log.info("get new request");
+                //this.$log.info("get new request");
                 if (++this.loadingCount === 1) {
-                    this.$log.info("Trigger loading progress");
+                   // this.$log.info("Trigger loading progress");
                     this.$rootScope.$broadcast(HttpEvents.EventProgress);
                     
                 }
                 return config || this.$q.when(config);
             }
             public response = (response) => {
-                this.$log.info("get new response");
+                //this.$log.info("get new response");
                 if (--this.loadingCount === 0) {
-                    this.$log.info("Trigger loading progress");
+                    //this.$log.info("Trigger loading progress");
                     this.$rootScope.$broadcast(HttpEvents.EventFinish);
                 }
                 return response || this.$q.when(response);
             }
             public responseError = (response) => {
-                this.$log.info("get new response error");
+              //  this.$log.info("get new response error");
                 if (this.loadingCount === 0) {
-                    this.$log.info("Trigger loading finish");
+                    //this.$log.info("Trigger loading finish");
                      this.$rootScope.$broadcast(HttpEvents.EventFinish);
                 }
                 return this.$q.reject(response);
             }
-
-            public static Factory: angular.IHttpInterceptorFactory=(...args)=> {
-                var x = new HttpEvents(...args);
-                var myStupidObject = {};
-
-
-                var theStupidMethods: string[] = ["request", "requestError", "response", "responseError"];
-
-                theStupidMethods.forEach(methodName => {
-                    if (x[methodName]) {
-                        myStupidObject[methodName] = (...aaaaaaa) => x[methodName](...aaaaaaa);
-                    }
-                })
-                console.log(myStupidObject);
-                return <angular.IHttpInterceptor>myStupidObject;
-            }
+     
         }
-        export class HttpEventsConfig {
-            static $inject = ["$httpProvider"];
-            private args: any[] = [];
-            get $httpProvider():angular.IHttpProvider {
-                return this.args[0];
+        export class HttpEventsConfig{
+         
+            private $injector: angular.auto.IInjectorService=null;
+            private get $httpProvider():angular.IHttpProvider {
+                return this.$injector.get<angular.IHttpProvider>("$httpProvider");
             }
-            constructor(...args) {
-                this.args = args;
+            constructor($injector: angular.auto.IInjectorService) {
+                this.$injector = $injector;
+                this.Init();
             }
             Init() {
+           
                 this.$httpProvider.interceptors.push(HttpEvents.InterceptorName);
+        
             }
         }
         export class ToggleOnHttpActivity {
@@ -592,8 +577,12 @@
 (() => {
 
     angular.module(Au.moduleName, [])
-        .factory(Au.Http.HttpEvents.InterceptorName, Au.Http.HttpEvents.Factory)
-        .config(Au.Http.HttpEventsConfig)
+        .factory(Au.Http.HttpEvents.InterceptorName, ["$injector", ($injector: angular.auto.IInjectorService) => {
+            return new Au.Http.HttpEvents($injector);
+        }])
+        .config(["$injector", ($injector: angular.auto.IInjectorService) => {
+            new Au.Http.HttpEventsConfig($injector)
+        }])
         .directive(Au.Http.ToggleOnHttpActivity.DirectiveName, Au.Http.ToggleOnHttpActivity.Directive)
         .directive(Au.Input.InputCtrl.directiveName, Au.Input.InputCtrl.directive)
         .service(Au.Button.ActionButtonConfig.serviceName, Au.Button.ActionButtonConfig)

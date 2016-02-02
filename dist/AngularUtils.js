@@ -5,6 +5,7 @@ var Au;
     (function (Http) {
         //http://stackoverflow.com/questions/20798626/write-http-interceptor-as-class
         //http://stackoverflow.com/questions/23361883/angular-js-detect-when-all-http-have-finished
+        //https://gist.github.com/abhijeetd/0686edcca2aeb0fc8b38
         var HttpEvents = (function () {
             function HttpEvents() {
                 var _this = this;
@@ -68,6 +69,13 @@ var Au;
             HttpEvents.InterceptorName = "HttpEventInterceptor";
             HttpEvents.EventProgress = "loading:progress";
             HttpEvents.EventFinish = "loading:finish";
+            HttpEvents.Factory = function () {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i - 0] = arguments[_i];
+                }
+                return new (HttpEvents.bind.apply(HttpEvents, [void 0].concat(args)))();
+            };
             return HttpEvents;
         })();
         Http.HttpEvents = HttpEvents;
@@ -736,7 +744,7 @@ var Au;
 })(Au || (Au = {}));
 (function () {
     angular.module(Au.moduleName, [])
-        .factory(Au.Http.HttpEvents.InterceptorName, Au.Http.HttpEvents)
+        .factory(Au.Http.HttpEvents.InterceptorName, Au.Http.HttpEvents.Factory)
         .config(Au.Http.HttpEventsConfig)
         .directive(Au.Http.ToggleOnHttpActivity.DirectiveName, Au.Http.ToggleOnHttpActivity.Directive)
         .directive(Au.Input.InputCtrl.directiveName, Au.Input.InputCtrl.directive)

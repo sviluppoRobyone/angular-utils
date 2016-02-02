@@ -3,7 +3,9 @@
     export module Http {
         //http://stackoverflow.com/questions/20798626/write-http-interceptor-as-class
         //http://stackoverflow.com/questions/23361883/angular-js-detect-when-all-http-have-finished
-        export class HttpEvents {
+        //https://gist.github.com/abhijeetd/0686edcca2aeb0fc8b38
+
+        export class HttpEvents implements angular.IHttpInterceptor {
             static $inject = ["$q", "$rootScope","$log"];
             private args: any[] = [];
             static InterceptorName = "HttpEventInterceptor";
@@ -59,7 +61,9 @@
                 return this.$q.reject(response);
             }
 
-           
+            public static Factory: angular.IHttpInterceptorFactory=(...args)=> {
+               return new HttpEvents(...args);
+           }
         }
         export class HttpEventsConfig {
             static $inject = ["$httpProvider"];
@@ -570,7 +574,7 @@
 (() => {
 
     angular.module(Au.moduleName, [])
-        .factory(Au.Http.HttpEvents.InterceptorName, Au.Http.HttpEvents)
+        .factory(Au.Http.HttpEvents.InterceptorName, Au.Http.HttpEvents.Factory)
         .config(Au.Http.HttpEventsConfig)
         .directive(Au.Http.ToggleOnHttpActivity.DirectiveName, Au.Http.ToggleOnHttpActivity.Directive)
         .directive(Au.Input.InputCtrl.directiveName, Au.Input.InputCtrl.directive)

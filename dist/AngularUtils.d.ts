@@ -1,7 +1,7 @@
 declare module Au {
     var moduleName: string;
     module Http {
-        class HttpEvents {
+        class HttpEvents implements angular.IHttpInterceptor {
             static $inject: string[];
             private args;
             static InterceptorName: string;
@@ -15,6 +15,7 @@ declare module Au {
             request: (config: any) => any;
             response: (response: any) => any;
             responseError: (response: any) => ng.IPromise<any>;
+            static Factory: angular.IHttpInterceptorFactory;
         }
         class HttpEventsConfig {
             static $inject: string[];

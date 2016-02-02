@@ -38,7 +38,8 @@
             
 
             private loadingCount :number=0;
-            public request=(config)=> {
+            public request = (config) => {
+                this.$log.info("get new request");
                 if (++this.loadingCount === 1) {
                     this.$log.info("Trigger loading progress");
                     this.$rootScope.$broadcast(HttpEvents.EventProgress);
@@ -46,14 +47,16 @@
                 }
                 return config || this.$q.when(config);
             }
-            public response=(response)=> {
+            public response = (response) => {
+                this.$log.info("get new response");
                 if (--this.loadingCount === 0) {
                     this.$log.info("Trigger loading progress");
                     this.$rootScope.$broadcast(HttpEvents.EventFinish);
                 }
                 return response || this.$q.when(response);
             }
-            public responseError=(response)=> {
+            public responseError = (response) => {
+                this.$log.info("get new response error");
                 if (this.loadingCount === 0) {
                     this.$log.info("Trigger loading finish");
                      this.$rootScope.$broadcast(HttpEvents.EventFinish);

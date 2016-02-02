@@ -16,6 +16,7 @@ var Au;
                 this.args = [];
                 this.loadingCount = 0;
                 this.request = function (config) {
+                    _this.$log.info("get new request");
                     if (++_this.loadingCount === 1) {
                         _this.$log.info("Trigger loading progress");
                         _this.$rootScope.$broadcast(HttpEvents.EventProgress);
@@ -23,6 +24,7 @@ var Au;
                     return config || _this.$q.when(config);
                 };
                 this.response = function (response) {
+                    _this.$log.info("get new response");
                     if (--_this.loadingCount === 0) {
                         _this.$log.info("Trigger loading progress");
                         _this.$rootScope.$broadcast(HttpEvents.EventFinish);
@@ -30,6 +32,7 @@ var Au;
                     return response || _this.$q.when(response);
                 };
                 this.responseError = function (response) {
+                    _this.$log.info("get new response error");
                     if (_this.loadingCount === 0) {
                         _this.$log.info("Trigger loading finish");
                         _this.$rootScope.$broadcast(HttpEvents.EventFinish);

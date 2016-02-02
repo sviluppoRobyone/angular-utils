@@ -7,13 +7,35 @@ var Au;
         //http://stackoverflow.com/questions/23361883/angular-js-detect-when-all-http-have-finished
         var HttpEvents = (function () {
             function HttpEvents() {
+                var _this = this;
                 var args = [];
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i - 0] = arguments[_i];
                 }
                 this.args = [];
                 this.loadingCount = 0;
+                this.request = function (config) {
+                    if (++_this.loadingCount === 1)
+                        _this.$rootScope.$broadcast(HttpEvents.EventProgress);
+                    return config || _this.$q.when(config);
+                };
+                this.response = function (response) {
+                    if (--_this.loadingCount === 0)
+                        _this.$rootScope.$broadcast(HttpEvents.EventFinish);
+                    return response || _this.$q.when(response);
+                };
+                this.responseError = function (response) {
+                    if (_this.loadingCount === 0)
+                        _this.$rootScope.$broadcast(HttpEvents.EventFinish);
+                    return _this.$q.reject(response);
+                };
                 this.args = args;
+                this.$rootScope.$on(HttpEvents.EventProgress, function () {
+                    _this.$log.info("Detect loading progress");
+                });
+                this.$rootScope.$on(HttpEvents.EventFinish, function () {
+                    _this.$log.info("Detect loading finish");
+                });
             }
             Object.defineProperty(HttpEvents.prototype, "$q", {
                 get: function () {
@@ -24,27 +46,19 @@ var Au;
             });
             Object.defineProperty(HttpEvents.prototype, "$rootScope", {
                 get: function () {
-                    return this.args[0];
+                    return this.args[1];
                 },
                 enumerable: true,
                 configurable: true
             });
-            HttpEvents.prototype.request = function (config) {
-                if (++this.loadingCount === 1)
-                    this.$rootScope.$broadcast(HttpEvents.EventProgress);
-                return config || this.$q.when(config);
-            };
-            HttpEvents.prototype.response = function (response) {
-                if (--this.loadingCount === 0)
-                    this.$rootScope.$broadcast(HttpEvents.EventFinish);
-                return response || this.$q.when(response);
-            };
-            HttpEvents.prototype.responseError = function (response) {
-                if (this.loadingCount === 0)
-                    this.$rootScope.$broadcast(HttpEvents.EventFinish);
-                return this.$q.reject(response);
-            };
-            HttpEvents.$inject = ["$q", "$rootScope"];
+            Object.defineProperty(HttpEvents.prototype, "$log", {
+                get: function () {
+                    return this.args[2];
+                },
+                enumerable: true,
+                configurable: true
+            });
+            HttpEvents.$inject = ["$q", "$rootScope", "$log"];
             HttpEvents.InterceptorName = "HttpEventInterceptor";
             HttpEvents.EventProgress = "loading:progress";
             HttpEvents.EventFinish = "loading:finish";

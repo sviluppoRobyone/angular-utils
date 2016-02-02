@@ -9,11 +9,12 @@ declare module Au {
             static EventFinish: string;
             $q: angular.IQService;
             $rootScope: angular.IRootScopeService;
+            $log: angular.ILogService;
             constructor(...args: any[]);
             private loadingCount;
-            request(config: any): any;
-            response(response: any): any;
-            responseError(response: any): ng.IPromise<any>;
+            request: (config: any) => any;
+            response: (response: any) => any;
+            responseError: (response: any) => ng.IPromise<any>;
         }
         class HttpEventsConfig {
             static $inject: string[];

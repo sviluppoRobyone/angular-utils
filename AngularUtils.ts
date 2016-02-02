@@ -4,7 +4,7 @@
         //http://stackoverflow.com/questions/20798626/write-http-interceptor-as-class
         //http://stackoverflow.com/questions/23361883/angular-js-detect-when-all-http-have-finished
         export class HttpEvents {
-            static $inject = ["$q", "$rootScope"];
+            static $inject = ["$q", "$rootScope","$log"];
             private args: any[] = [];
             static InterceptorName = "HttpEventInterceptor";
             static EventProgress="loading:progress";
@@ -16,24 +16,35 @@
             }
 
             get $rootScope(): angular.IRootScopeService {
-                return this.args[0];
+                return this.args[1];
+            }
+            get $log() :angular.ILogService{
+                return this.args[2];
             }
             constructor(...args) {
                 this.args = args;
-                
+
+                this.$rootScope.$on(HttpEvents.EventProgress, () => {
+                    this.$log.info("Detect loading progress");
+                });
+
+                this.$rootScope.$on(HttpEvents.EventFinish, () => {
+                    this.$log.info("Detect loading finish");
+                });
             }
 
+            
 
             private loadingCount :number=0;
-            public request(config) {
+            public request=(config)=> {
                 if (++this.loadingCount === 1) this.$rootScope.$broadcast(HttpEvents.EventProgress);
                 return config || this.$q.when(config);
             }
-            public response(response) {
+            public response=(response)=> {
                 if (--this.loadingCount === 0) this.$rootScope.$broadcast(HttpEvents.EventFinish);
                 return response || this.$q.when(response);
             }
-            public responseError(response) {
+            public responseError=(response)=> {
                 if (this.loadingCount === 0) this.$rootScope.$broadcast(HttpEvents.EventFinish);
                 return this.$q.reject(response);
             }

@@ -56,19 +56,26 @@ var Au;
             });
             Object.defineProperty(HttpEvents.prototype, "$rootScope", {
                 get: function () {
-                    return this.args[1];
+                    return this.$injector.get("$rootScope");
                 },
                 enumerable: true,
                 configurable: true
             });
             Object.defineProperty(HttpEvents.prototype, "$log", {
                 get: function () {
-                    return this.args[2];
+                    return this.$injector.get("$log");
                 },
                 enumerable: true,
                 configurable: true
             });
-            HttpEvents.$inject = ["$q", "$rootScope", "$log"];
+            Object.defineProperty(HttpEvents.prototype, "$injector", {
+                get: function () {
+                    return this.args[1];
+                },
+                enumerable: true,
+                configurable: true
+            });
+            HttpEvents.$inject = ["$q", "$injector"];
             HttpEvents.InterceptorName = "HttpEventInterceptor";
             HttpEvents.EventProgress = "loading:progress";
             HttpEvents.EventFinish = "loading:finish";

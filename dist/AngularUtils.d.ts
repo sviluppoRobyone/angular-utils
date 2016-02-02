@@ -10,6 +10,7 @@ declare module Au {
             $q: angular.IQService;
             $rootScope: angular.IRootScopeService;
             $log: angular.ILogService;
+            $injector: angular.auto.IInjectorService;
             constructor(...args: any[]);
             private loadingCount;
             request: (config: any) => any;

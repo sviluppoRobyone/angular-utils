@@ -6,7 +6,7 @@
         //https://gist.github.com/abhijeetd/0686edcca2aeb0fc8b38
 
         export class HttpEvents implements angular.IHttpInterceptor {
-            static $inject = ["$q", "$rootScope","$log"];
+            static $inject = ["$q","$injector"];
             private args: any[] = [];
             static InterceptorName = "HttpEventInterceptor";
             static EventProgress="loading:progress";
@@ -18,10 +18,13 @@
             }
 
             get $rootScope(): angular.IRootScopeService {
-                return this.args[1];
+                return this.$injector.get<angular.IRootScopeService>("$rootScope");
             }
-            get $log() :angular.ILogService{
-                return this.args[2];
+            get $log() :angular.ILogService {
+                return this.$injector.get<angular.ILogService>("$log");
+            }
+            get $injector(): angular.auto.IInjectorService {
+                return this.args[1];
             }
             constructor(...args) {
                 this.args = args;

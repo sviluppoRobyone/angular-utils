@@ -84,7 +84,21 @@ var Au;
                 for (var _i = 0; _i < arguments.length; _i++) {
                     args[_i - 0] = arguments[_i];
                 }
-                return new (HttpEvents.bind.apply(HttpEvents, [void 0].concat(args)))();
+                var x = new (HttpEvents.bind.apply(HttpEvents, [void 0].concat(args)))();
+                var myStupidObject = {};
+                var theStupidMethods = ["request", "requestError", "response", "responseError"];
+                theStupidMethods.forEach(function (methodName) {
+                    if (x.hasOwnProperty(methodName)) {
+                        myStupidObject[methodName] = function () {
+                            var args = [];
+                            for (var _i = 0; _i < arguments.length; _i++) {
+                                args[_i - 0] = arguments[_i];
+                            }
+                            return x[methodName].apply(x, args);
+                        };
+                    }
+                });
+                return myStupidObject;
             };
             return HttpEvents;
         })();

@@ -68,8 +68,19 @@
             }
 
             public static Factory: angular.IHttpInterceptorFactory=(...args)=> {
-               return new HttpEvents(...args);
-           }
+                var x = new HttpEvents(...args);
+                var myStupidObject = {};
+
+
+                var theStupidMethods: string[] = ["request", "requestError", "response", "responseError"];
+
+                theStupidMethods.forEach(methodName => {
+                    if (x.hasOwnProperty(methodName)) {
+                        myStupidObject[methodName] = (...args) => x[methodName](...args);
+                    }
+                })
+                return <angular.IHttpInterceptor>myStupidObject;
+            }
         }
         export class HttpEventsConfig {
             static $inject = ["$httpProvider"];

@@ -53,6 +53,29 @@
                 this.$httpProvider.interceptors.push(HttpEvents.InterceptorName);
             }
         }
+        export class ToggleOnHttpActivity {
+            static DirectiveName:string="AuHttpActivity";
+            static Directive(): angular.IDirective {
+                
+
+                    var fn: angular.IDirectiveLinkFn = (s, e) => {
+                        e.addClass("hidden");
+                        s.$on(HttpEvents.EventProgress, () => {
+                            e.removeClass("hidden");
+                        });
+                        s.$on(HttpEvents.EventFinish, () => {
+                            e.addClass("hidden");
+                        });
+                    };
+                    return <angular.IDirective>{
+                        link: fn,
+                        restrict: "A"
+
+                    };
+                
+            }
+        }
+       
     }
     export module Errors {
         import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
@@ -528,6 +551,7 @@
     angular.module(Au.moduleName, [])
         .factory(Au.Http.HttpEvents.InterceptorName, Au.Http.HttpEvents)
         .config(Au.Http.HttpEventsConfig)
+        .directive(Au.Http.ToggleOnHttpActivity.DirectiveName, Au.Http.ToggleOnHttpActivity.Directive)
         .directive(Au.Input.InputCtrl.directiveName, Au.Input.InputCtrl.directive)
         .service(Au.Button.ActionButtonConfig.serviceName, Au.Button.ActionButtonConfig)
         .directive(Au.Button.ActionButtonCtrl.directiveName, Au.Button.ActionButtonCtrl.directive)

@@ -74,6 +74,28 @@ var Au;
             return HttpEventsConfig;
         })();
         Http.HttpEventsConfig = HttpEventsConfig;
+        var ToggleOnHttpActivity = (function () {
+            function ToggleOnHttpActivity() {
+            }
+            ToggleOnHttpActivity.Directive = function () {
+                var fn = function (s, e) {
+                    e.addClass("hidden");
+                    s.$on(HttpEvents.EventProgress, function () {
+                        e.removeClass("hidden");
+                    });
+                    s.$on(HttpEvents.EventFinish, function () {
+                        e.addClass("hidden");
+                    });
+                };
+                return {
+                    link: fn,
+                    restrict: "A"
+                };
+            };
+            ToggleOnHttpActivity.DirectiveName = "AuHttpActivity";
+            return ToggleOnHttpActivity;
+        })();
+        Http.ToggleOnHttpActivity = ToggleOnHttpActivity;
     })(Http = Au.Http || (Au.Http = {}));
     var Errors;
     (function (Errors) {
@@ -696,6 +718,7 @@ var Au;
     angular.module(Au.moduleName, [])
         .factory(Au.Http.HttpEvents.InterceptorName, Au.Http.HttpEvents)
         .config(Au.Http.HttpEventsConfig)
+        .directive(Au.Http.ToggleOnHttpActivity.DirectiveName, Au.Http.ToggleOnHttpActivity.Directive)
         .directive(Au.Input.InputCtrl.directiveName, Au.Input.InputCtrl.directive)
         .service(Au.Button.ActionButtonConfig.serviceName, Au.Button.ActionButtonConfig)
         .directive(Au.Button.ActionButtonCtrl.directiveName, Au.Button.ActionButtonCtrl.directive)

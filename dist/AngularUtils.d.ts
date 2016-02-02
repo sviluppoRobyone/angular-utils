@@ -22,6 +22,10 @@ declare module Au {
             constructor(...args: any[]);
             Init(): void;
         }
+        class ToggleOnHttpActivity {
+            static DirectiveName: string;
+            static Directive(): angular.IDirective;
+        }
     }
     module Errors {
         import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;

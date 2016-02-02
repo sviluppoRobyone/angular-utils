@@ -1,5 +1,59 @@
 ﻿module Au {
     export var moduleName = "angularUtils";
+    export module Http {
+        //http://stackoverflow.com/questions/20798626/write-http-interceptor-as-class
+        //http://stackoverflow.com/questions/23361883/angular-js-detect-when-all-http-have-finished
+        export class HttpEvents {
+            static $inject = ["$q", "$rootScope"];
+            private args: any[] = [];
+            static InterceptorName = "HttpEventInterceptor";
+            static EventProgress="loading:progress";
+            static EventFinish="loading:finish";
+           
+
+            get $q(): angular.IQService {
+                return this.args[0];
+            }
+
+            get $rootScope(): angular.IRootScopeService {
+                return this.args[0];
+            }
+            constructor(...args) {
+                this.args = args;
+                
+            }
+
+
+            private loadingCount :number=0;
+            public request(config) {
+                if (++this.loadingCount === 1) this.$rootScope.$broadcast(HttpEvents.EventProgress);
+                return config || this.$q.when(config);
+            }
+            public response(response) {
+                if (--this.loadingCount === 0) this.$rootScope.$broadcast(HttpEvents.EventFinish);
+                return response || this.$q.when(response);
+            }
+            public responseError(response) {
+                if (this.loadingCount === 0) this.$rootScope.$broadcast(HttpEvents.EventFinish);
+                return this.$q.reject(response);
+            }
+
+           
+        }
+        export class HttpEventsConfig {
+            static $inject = ["$httpProvider"];
+            private args: any[] = [];
+            get $httpProvider():angular.IHttpProvider {
+                return this.args[0];
+            }
+            constructor(...args) {
+                this.args = args;
+            }
+            Init() {
+                this.$httpProvider.interceptors.push(HttpEvents.InterceptorName);
+            }
+        }
+    }
     export module Errors {
         import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
 
@@ -472,6 +526,8 @@
 (() => {
 
     angular.module(Au.moduleName, [])
+        .factory(Au.Http.HttpEvents.InterceptorName, Au.Http.HttpEvents)
+        .config(Au.Http.HttpEventsConfig)
         .directive(Au.Input.InputCtrl.directiveName, Au.Input.InputCtrl.directive)
         .service(Au.Button.ActionButtonConfig.serviceName, Au.Button.ActionButtonConfig)
         .directive(Au.Button.ActionButtonCtrl.directiveName, Au.Button.ActionButtonCtrl.directive)

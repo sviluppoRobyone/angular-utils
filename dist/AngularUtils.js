@@ -1,6 +1,80 @@
 var Au;
 (function (Au) {
     Au.moduleName = "angularUtils";
+    var Http;
+    (function (Http) {
+        //http://stackoverflow.com/questions/20798626/write-http-interceptor-as-class
+        //http://stackoverflow.com/questions/23361883/angular-js-detect-when-all-http-have-finished
+        var HttpEvents = (function () {
+            function HttpEvents() {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i - 0] = arguments[_i];
+                }
+                this.args = [];
+                this.loadingCount = 0;
+                this.args = args;
+            }
+            Object.defineProperty(HttpEvents.prototype, "$q", {
+                get: function () {
+                    return this.args[0];
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(HttpEvents.prototype, "$rootScope", {
+                get: function () {
+                    return this.args[0];
+                },
+                enumerable: true,
+                configurable: true
+            });
+            HttpEvents.prototype.request = function (config) {
+                if (++this.loadingCount === 1)
+                    this.$rootScope.$broadcast(HttpEvents.EventProgress);
+                return config || this.$q.when(config);
+            };
+            HttpEvents.prototype.response = function (response) {
+                if (--this.loadingCount === 0)
+                    this.$rootScope.$broadcast(HttpEvents.EventFinish);
+                return response || this.$q.when(response);
+            };
+            HttpEvents.prototype.responseError = function (response) {
+                if (this.loadingCount === 0)
+                    this.$rootScope.$broadcast(HttpEvents.EventFinish);
+                return this.$q.reject(response);
+            };
+            HttpEvents.$inject = ["$q", "$rootScope"];
+            HttpEvents.InterceptorName = "HttpEventInterceptor";
+            HttpEvents.EventProgress = "loading:progress";
+            HttpEvents.EventFinish = "loading:finish";
+            return HttpEvents;
+        })();
+        Http.HttpEvents = HttpEvents;
+        var HttpEventsConfig = (function () {
+            function HttpEventsConfig() {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i - 0] = arguments[_i];
+                }
+                this.args = [];
+                this.args = args;
+            }
+            Object.defineProperty(HttpEventsConfig.prototype, "$httpProvider", {
+                get: function () {
+                    return this.args[0];
+                },
+                enumerable: true,
+                configurable: true
+            });
+            HttpEventsConfig.prototype.Init = function () {
+                this.$httpProvider.interceptors.push(HttpEvents.InterceptorName);
+            };
+            HttpEventsConfig.$inject = ["$httpProvider"];
+            return HttpEventsConfig;
+        })();
+        Http.HttpEventsConfig = HttpEventsConfig;
+    })(Http = Au.Http || (Au.Http = {}));
     var Errors;
     (function (Errors) {
         Errors.defaultError = function (promise, resp) {
@@ -620,6 +694,8 @@ var Au;
 })(Au || (Au = {}));
 (function () {
     angular.module(Au.moduleName, [])
+        .factory(Au.Http.HttpEvents.InterceptorName, Au.Http.HttpEvents)
+        .config(Au.Http.HttpEventsConfig)
         .directive(Au.Input.InputCtrl.directiveName, Au.Input.InputCtrl.directive)
         .service(Au.Button.ActionButtonConfig.serviceName, Au.Button.ActionButtonConfig)
         .directive(Au.Button.ActionButtonCtrl.directiveName, Au.Button.ActionButtonCtrl.directive)

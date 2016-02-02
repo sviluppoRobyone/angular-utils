@@ -1,5 +1,28 @@
 declare module Au {
     var moduleName: string;
+    module Http {
+        class HttpEvents {
+            static $inject: string[];
+            private args;
+            static InterceptorName: string;
+            static EventProgress: string;
+            static EventFinish: string;
+            $q: angular.IQService;
+            $rootScope: angular.IRootScopeService;
+            constructor(...args: any[]);
+            private loadingCount;
+            request(config: any): any;
+            response(response: any): any;
+            responseError(response: any): ng.IPromise<any>;
+        }
+        class HttpEventsConfig {
+            static $inject: string[];
+            private args;
+            $httpProvider: angular.IHttpProvider;
+            constructor(...args: any[]);
+            Init(): void;
+        }
+    }
     module Errors {
         import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
         interface IGetErrors<T> {

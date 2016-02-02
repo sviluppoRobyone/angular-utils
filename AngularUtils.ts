@@ -54,7 +54,7 @@
             }
         }
         export class ToggleOnHttpActivity {
-            static DirectiveName:string="AuHttpActivity";
+            static DirectiveName:string="auHttpActivity";
             static Directive(): angular.IDirective {
                 
 

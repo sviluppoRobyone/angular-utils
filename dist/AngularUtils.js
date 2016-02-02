@@ -92,7 +92,7 @@ var Au;
                     restrict: "A"
                 };
             };
-            ToggleOnHttpActivity.DirectiveName = "AuHttpActivity";
+            ToggleOnHttpActivity.DirectiveName = "auHttpActivity";
             return ToggleOnHttpActivity;
         })();
         Http.ToggleOnHttpActivity = ToggleOnHttpActivity;

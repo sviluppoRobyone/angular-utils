@@ -37,15 +37,25 @@
 
             private loadingCount :number=0;
             public request=(config)=> {
-                if (++this.loadingCount === 1) this.$rootScope.$broadcast(HttpEvents.EventProgress);
+                if (++this.loadingCount === 1) {
+                    this.$log.info("Trigger loading progress");
+                    this.$rootScope.$broadcast(HttpEvents.EventProgress);
+                    
+                }
                 return config || this.$q.when(config);
             }
             public response=(response)=> {
-                if (--this.loadingCount === 0) this.$rootScope.$broadcast(HttpEvents.EventFinish);
+                if (--this.loadingCount === 0) {
+                    this.$log.info("Trigger loading progress");
+                    this.$rootScope.$broadcast(HttpEvents.EventFinish);
+                }
                 return response || this.$q.when(response);
             }
             public responseError=(response)=> {
-                if (this.loadingCount === 0) this.$rootScope.$broadcast(HttpEvents.EventFinish);
+                if (this.loadingCount === 0) {
+                    this.$log.info("Trigger loading finish");
+                     this.$rootScope.$broadcast(HttpEvents.EventFinish);
+                }
                 return this.$q.reject(response);
             }
 
@@ -71,10 +81,10 @@
 
                     var fn: angular.IDirectiveLinkFn = (s, e) => {
                         e.addClass("hidden");
-                        s.$on(HttpEvents.EventProgress, () => {
+                        s.$root.$on(HttpEvents.EventProgress, () => {
                             e.removeClass("hidden");
                         });
-                        s.$on(HttpEvents.EventFinish, () => {
+                        s.$root.$on(HttpEvents.EventFinish, () => {
                             e.addClass("hidden");
                         });
                     };

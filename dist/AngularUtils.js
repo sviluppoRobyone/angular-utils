@@ -15,18 +15,24 @@ var Au;
                 this.args = [];
                 this.loadingCount = 0;
                 this.request = function (config) {
-                    if (++_this.loadingCount === 1)
+                    if (++_this.loadingCount === 1) {
+                        _this.$log.info("Trigger loading progress");
                         _this.$rootScope.$broadcast(HttpEvents.EventProgress);
+                    }
                     return config || _this.$q.when(config);
                 };
                 this.response = function (response) {
-                    if (--_this.loadingCount === 0)
+                    if (--_this.loadingCount === 0) {
+                        _this.$log.info("Trigger loading progress");
                         _this.$rootScope.$broadcast(HttpEvents.EventFinish);
+                    }
                     return response || _this.$q.when(response);
                 };
                 this.responseError = function (response) {
-                    if (_this.loadingCount === 0)
+                    if (_this.loadingCount === 0) {
+                        _this.$log.info("Trigger loading finish");
                         _this.$rootScope.$broadcast(HttpEvents.EventFinish);
+                    }
                     return _this.$q.reject(response);
                 };
                 this.args = args;
@@ -94,10 +100,10 @@ var Au;
             ToggleOnHttpActivity.Directive = function () {
                 var fn = function (s, e) {
                     e.addClass("hidden");
-                    s.$on(HttpEvents.EventProgress, function () {
+                    s.$root.$on(HttpEvents.EventProgress, function () {
                         e.removeClass("hidden");
                     });
-                    s.$on(HttpEvents.EventFinish, function () {
+                    s.$root.$on(HttpEvents.EventFinish, function () {
                         e.addClass("hidden");
                     });
                 };

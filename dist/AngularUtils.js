@@ -88,16 +88,17 @@ var Au;
                 var myStupidObject = {};
                 var theStupidMethods = ["request", "requestError", "response", "responseError"];
                 theStupidMethods.forEach(function (methodName) {
-                    if (x.hasOwnProperty(methodName)) {
+                    if (x[methodName]) {
                         myStupidObject[methodName] = function () {
-                            var args = [];
+                            var aaaaaaa = [];
                             for (var _i = 0; _i < arguments.length; _i++) {
-                                args[_i - 0] = arguments[_i];
+                                aaaaaaa[_i - 0] = arguments[_i];
                             }
-                            return x[methodName].apply(x, args);
+                            return x[methodName].apply(x, aaaaaaa);
                         };
                     }
                 });
+                console.log(myStupidObject);
                 return myStupidObject;
             };
             return HttpEvents;

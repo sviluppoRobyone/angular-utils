@@ -75,10 +75,11 @@
                 var theStupidMethods: string[] = ["request", "requestError", "response", "responseError"];
 
                 theStupidMethods.forEach(methodName => {
-                    if (x.hasOwnProperty(methodName)) {
-                        myStupidObject[methodName] = (...args) => x[methodName](...args);
+                    if (x[methodName]) {
+                        myStupidObject[methodName] = (...aaaaaaa) => x[methodName](...aaaaaaa);
                     }
                 })
+                console.log(myStupidObject);
                 return <angular.IHttpInterceptor>myStupidObject;
             }
         }

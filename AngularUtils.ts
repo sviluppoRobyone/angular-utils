@@ -26,39 +26,45 @@
             constructor($injector: angular.auto.IInjectorService) {
                 this.$injector = $injector;
 
-                //this.$rootScope.$on(HttpEvents.EventProgress, () => {
-                //    this.$log.info("Detect loading progress");
-                //});
+                this.$rootScope.$on(HttpEvents.EventProgress, () => {
+                    this.$log.debug("Detect loading progress");
+                });
 
-                //this.$rootScope.$on(HttpEvents.EventFinish, () => {
-                //    this.$log.info("Detect loading finish");
-                //});
+                this.$rootScope.$on(HttpEvents.EventFinish, () => {
+                    this.$log.debug("Detect loading finish");
+                });
+                this.$rootScope.$watch(()=>this.loadingCount,() => {
+                    this.$log.debug("Ajax count change ", this.loadingCount);
+                })
             }
 
             
 
             private loadingCount :number=0;
             public request = (config) => {
-                //this.$log.info("get new request");
-                if (++this.loadingCount === 1) {
-                   // this.$log.info("Trigger loading progress");
+                this.$log.debug("get new request");
+                this.loadingCount++;
+                if (this.loadingCount) {
+                    this.$log.debug("Trigger loading progress");
                     this.$rootScope.$broadcast(HttpEvents.EventProgress);
                     
                 }
                 return config || this.$q.when(config);
             }
             public response = (response) => {
-                //this.$log.info("get new response");
-                if (--this.loadingCount === 0) {
-                    //this.$log.info("Trigger loading progress");
+                this.$log.debug("get new response");
+                this.loadingCount--;
+                if (!this.loadingCount) {
+                    this.$log.debug("Trigger loading progress");
                     this.$rootScope.$broadcast(HttpEvents.EventFinish);
                 }
                 return response || this.$q.when(response);
             }
             public responseError = (response) => {
-              //  this.$log.info("get new response error");
-                if (this.loadingCount === 0) {
-                    //this.$log.info("Trigger loading finish");
+                this.$log.debug("get new response error");
+                this.loadingCount--;
+                if (!this.loadingCount) {
+                    this.$log.debug("Trigger loading finish");
                      this.$rootScope.$broadcast(HttpEvents.EventFinish);
                 }
                 return this.$q.reject(response);

@@ -12,36 +12,42 @@ var Au;
                 this.$injector = null;
                 this.loadingCount = 0;
                 this.request = function (config) {
-                    //this.$log.info("get new request");
-                    if (++_this.loadingCount === 1) {
-                        // this.$log.info("Trigger loading progress");
+                    _this.$log.debug("get new request");
+                    _this.loadingCount++;
+                    if (_this.loadingCount) {
+                        _this.$log.debug("Trigger loading progress");
                         _this.$rootScope.$broadcast(HttpEvents.EventProgress);
                     }
                     return config || _this.$q.when(config);
                 };
                 this.response = function (response) {
-                    //this.$log.info("get new response");
-                    if (--_this.loadingCount === 0) {
-                        //this.$log.info("Trigger loading progress");
+                    _this.$log.debug("get new response");
+                    _this.loadingCount--;
+                    if (!_this.loadingCount) {
+                        _this.$log.debug("Trigger loading progress");
                         _this.$rootScope.$broadcast(HttpEvents.EventFinish);
                     }
                     return response || _this.$q.when(response);
                 };
                 this.responseError = function (response) {
-                    //  this.$log.info("get new response error");
-                    if (_this.loadingCount === 0) {
-                        //this.$log.info("Trigger loading finish");
+                    _this.$log.debug("get new response error");
+                    _this.loadingCount--;
+                    if (!_this.loadingCount) {
+                        _this.$log.debug("Trigger loading finish");
                         _this.$rootScope.$broadcast(HttpEvents.EventFinish);
                     }
                     return _this.$q.reject(response);
                 };
                 this.$injector = $injector;
-                //this.$rootScope.$on(HttpEvents.EventProgress, () => {
-                //    this.$log.info("Detect loading progress");
-                //});
-                //this.$rootScope.$on(HttpEvents.EventFinish, () => {
-                //    this.$log.info("Detect loading finish");
-                //});
+                this.$rootScope.$on(HttpEvents.EventProgress, function () {
+                    _this.$log.debug("Detect loading progress");
+                });
+                this.$rootScope.$on(HttpEvents.EventFinish, function () {
+                    _this.$log.debug("Detect loading finish");
+                });
+                this.$rootScope.$watch(function () { return _this.loadingCount; }, function () {
+                    _this.$log.debug("Ajax count change ", _this.loadingCount);
+                });
             }
             Object.defineProperty(HttpEvents.prototype, "$q", {
                 get: function () {

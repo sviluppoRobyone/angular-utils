@@ -6,9 +6,14 @@
   ],
   "description": "",
   "main": [
-	  "./dist/AngularUtils.js",
+    "./dist/AngularUtils.js",
     "./dist/AngularUtils.js.map",
-    "./dist/AngularUtils.d.ts"
+    "./dist/AngularUtils.d.ts",
+
+    "./dist/auDatepicker.js",
+    "./dist/auDatepicker.d.ts",
+    "./dist/auDatepicker.js.map"
+
   ],
   "moduleType": [
     "es6"
@@ -25,6 +30,7 @@
     "angular": "~1.4.9",
     "jquery": "~2.2.0",
     "bootstrap": "~3.3.6",
-    "components-font-awesome": "~4.5.0"
+    "components-font-awesome": "~4.5.0",
+    "bootstrap-datepicker": "~1.6.0"
   }
 }

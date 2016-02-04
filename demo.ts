@@ -7,6 +7,7 @@
             booleanInput: boolean;
             patternInput:string;
             fileContent: string;
+            dateInput:Date;
             fileName:string;
         }
 
@@ -18,6 +19,7 @@
                 numberInput: 0,
                 patternInput:null,
                 textInput: "",
+                dateInput:null,
                 fileContent: null,
                 fileName:null
             };

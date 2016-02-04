@@ -6,6 +6,7 @@ declare module angularUtils {
             booleanInput: boolean;
             patternInput: string;
             fileContent: string;
+            dateInput: Date;
             fileName: string;
         }
         class DemoController {

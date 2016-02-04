@@ -13,6 +13,7 @@ var angularUtils;
                     numberInput: 0,
                     patternInput: null,
                     textInput: "",
+                    dateInput: null,
                     fileContent: null,
                     fileName: null
                 };

@@ -23,6 +23,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bower_components\angular\angular.js" />
+    <Content Include="bower_components\bootstrap-datepicker\dist\css\bootstrap-datepicker3.min.css" />
+    <Content Include="bower_components\bootstrap-datepicker\dist\js\bootstrap-datepicker.min.js" />
+    <Content Include="bower_components\bootstrap-datepicker\dist\locales\bootstrap-datepicker.it.min.js" />
     <Content Include="bower_components\bootstrap\dist\css\bootstrap-theme.css" />
     <Content Include="bower_components\bootstrap\dist\css\bootstrap-theme.min.css" />
     <Content Include="bower_components\bootstrap\dist\css\bootstrap.css" />
@@ -36,11 +39,13 @@
     <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="bower_components\jquery\dist\jquery.js" />
     <Content Include="dist\AngularUtils.js" />
+    <Content Include="dist\auDatepicker.js" />
     <Content Include="dist\demo.js" />
     <Content Include="index.html" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="auDatepicker.ts" />
     <TypeScriptCompile Include="AngularUtils.ts" />
     <TypeScriptCompile Include="demo.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-animate.d.ts" />
@@ -51,6 +56,7 @@
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-route.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-sanitize.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\bootstrap.datepicker\bootstrap.datepicker.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\es6-promise\es6-promise.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
@@ -73,6 +79,7 @@
     <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.woff" />
     <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.woff2" />
     <Content Include="bower_components\components-font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="dist\auDatepicker.js.map" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

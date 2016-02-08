@@ -12,7 +12,11 @@
 
     "./dist/auDatepicker.js",
     "./dist/auDatepicker.d.ts",
-    "./dist/auDatepicker.js.map"
+    "./dist/auDatepicker.js.map",
+
+    "./dist/AuHttpDateFix.js",
+    "./dist/AuHttpDateFix.d.ts",
+    "./dist/AuHttpDateFix.js.map"
 
   ],
   "moduleType": [
@@ -21,10 +25,18 @@
   "license": "MIT",
   "homepage": "",
   "ignore": [
-	"*",
+    "*",
     "!dist/AngularUtils.js",
     "!dist/AngularUtils.js",
-    "!dist/AngularUtils.d.ts"
+    "!dist/AngularUtils.d.ts",
+
+    "!dist/auDatepicker.js",
+    "!dist/auDatepicker.d.ts",
+    "!dist/auDatepicker.js.map",
+
+    "!dist/AuHttpDateFix.js",
+    "!dist/AuHttpDateFix.d.ts",
+    "!dist/AuHttpDateFix.js.map"
   ],
   "dependencies": {
     "angular": "~1.4.9",

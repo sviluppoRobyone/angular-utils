@@ -25,7 +25,8 @@
             }
 
             private regexList: RegExp[] = [
-                /^\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2}$/
+                /^\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2}$/, //2016-02-18T23:00:00
+                /^\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2}(\.{1}\d{1,})?\d$/  //2016-02-18T23:00:00.00000
             ];
             private ApplyFix(obj: string) {
                 this.$log.debug(Intercept.InterceptorName, "Apply ", obj);

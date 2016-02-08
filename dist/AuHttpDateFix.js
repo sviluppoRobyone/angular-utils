@@ -9,7 +9,8 @@ var Au;
                 this.stringType = typeof "";
                 this.objectType = typeof {};
                 this.regexList = [
-                    /^\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2}$/
+                    /^\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2}$/,
+                    /^\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2}(\.{1}\d{1,})?\d$/ //2016-02-18T23:00:00.00000
                 ];
                 this.response = function (response) {
                     _this.$log.debug(Intercept.InterceptorName, "Response: ", response);

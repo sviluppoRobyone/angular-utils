@@ -10,7 +10,9 @@
             get $q(): angular.IQService {
                 return this.$injector.get<angular.IQService>("$q");
             }
-           
+            get $log(): angular.ILogService {
+                return this.$injector.get<angular.ILogService>("$log");
+            }
             private $injector: angular.auto.IInjectorService = null;
             
             private stringType= typeof "";
@@ -25,12 +27,16 @@
             private regexList: RegExp[] = [
                 /^\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2}$/
             ];
-            private  ApplyFix(obj: string) {
+            private ApplyFix(obj: string) {
+                this.$log.debug(Intercept.InterceptorName, "Apply ", obj);
                 obj = <string><any>(new Date(obj));
             }
             private SearchObj(obj: any): number {
+                this.$log.debug(Intercept.InterceptorName, "Search: ", obj);
+               
                 if (!obj) return 0;
                 var t = typeof obj;
+                this.$log.debug(Intercept.InterceptorName, "Type ", t);
                 if (t == this.stringType) {
 
                     if (this.regexList.some(r => r.exec(obj) !== null)) {
@@ -41,14 +47,17 @@
                 }
                 
                 if (Array.isArray(obj)) {
+                    this.$log.debug(Intercept.InterceptorName, "Is Array", (<Array<any>>obj).length);
                     return (<Array<any>>obj).map(p => this.SearchObj(p)).reduce((a, b) => {
                         return a + b;
                     },0);
                 }
 
                 if (t == this.objectType) {
+
                     var res = 0;
                     for (var propertyName in obj) {
+                        this.$log.debug(Intercept.InterceptorName, "Property["+propertyName+"]");
                         if (obj[propertyName])
                             res += this.SearchObj(obj[propertyName]);
                     }
@@ -57,7 +66,7 @@
             }
            
             public response = (response: angular.IHttpPromiseCallbackArg<any>) => {
-
+                this.$log.debug(Intercept.InterceptorName,"Response: ", response);
                 this.SearchObj(response.data);
                 return response || this.$q.when(response);
 

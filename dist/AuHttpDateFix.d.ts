@@ -3,6 +3,7 @@ declare module Au {
         class Intercept implements angular.IHttpInterceptor {
             static InterceptorName: string;
             $q: angular.IQService;
+            $log: angular.ILogService;
             private $injector;
             private stringType;
             private objectType;

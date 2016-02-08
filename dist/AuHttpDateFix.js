@@ -41,7 +41,7 @@ var Au;
                 if (Array.isArray(obj)) {
                     return obj.map(function (p) { return _this.SearchObj(p); }).reduce(function (a, b) {
                         return a + b;
-                    });
+                    }, 0);
                 }
                 if (t == this.objectType) {
                     var res = 0;

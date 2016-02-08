@@ -43,7 +43,7 @@
                 if (Array.isArray(obj)) {
                     return (<Array<any>>obj).map(p => this.SearchObj(p)).reduce((a, b) => {
                         return a + b;
-                    });
+                    },0);
                 }
 
                 if (t == this.objectType) {

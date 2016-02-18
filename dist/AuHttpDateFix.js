@@ -14,7 +14,7 @@ var Au;
                 ];
                 this.response = function (response) {
                     _this.$log.debug(Intercept.InterceptorName, "Response: ", response);
-                    if (response.config.headers["Content-Type"] && response.config.headers["Content-Type"].toString().indexOf("application/json") > -1)
+                    if (response.headers("Content-Type") && response.headers("Content-Type").indexOf("application/json") > -1)
                         _this.SearchObj(response.data);
                     return response || _this.$q.when(response);
                 };

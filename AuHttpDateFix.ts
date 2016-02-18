@@ -67,7 +67,8 @@
             }
            
             public response = (response: angular.IHttpPromiseCallbackArg<any>) => {
-                this.$log.debug(Intercept.InterceptorName,"Response: ", response);
+                this.$log.debug(Intercept.InterceptorName, "Response: ", response);
+                if (response.config.headers["Content-Type"] && response.config.headers["Content-Type"].toString().indexOf("application/json")>-1)
                 this.SearchObj(response.data);
                 return response || this.$q.when(response);
 

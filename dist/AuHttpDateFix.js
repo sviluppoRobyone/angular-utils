@@ -13,9 +13,10 @@ var Au;
                     /^\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2}(\.{1}\d{1,})?\d$/ //2016-02-18T23:00:00.00000
                 ];
                 this.response = function (response) {
-                    _this.$log.debug(Intercept.InterceptorName, "Response: ", response);
-                    if (response.headers("Content-Type") && response.headers("Content-Type").indexOf("application/json") > -1)
+                    if (response.headers("Content-Type") && response.headers("Content-Type").indexOf("application/json") > -1) {
+                        _this.$log.debug(Intercept.InterceptorName, "Response: ", response);
                         _this.SearchObj(response.data);
+                    }
                     return response || _this.$q.when(response);
                 };
                 this.$injector = $injector;

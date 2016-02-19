@@ -115,7 +115,7 @@
         import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
 
         export interface IGetErrors<T> {
-                (promise: angular.IDeferred<string[]>, resp: T): void
+            (promise: angular.IDeferred<string[]>, resp: angular.IHttpPromiseCallbackArg<T>): void
          }
 
         export var defaultError: IGetErrors<any> = (promise,resp) => {
@@ -128,7 +128,7 @@
                 ModelState:{[p:string]:string[]}
             }
         }
-        export var dotnetMvcError:IGetErrors<IHttpPromiseCallbackArg<dotnet.IModelState>>=(promise,response) => {
+        export var dotnetMvcError:IGetErrors<dotnet.IModelState>=(promise,response) => {
             if (response.data.ModelState) {
                 var errors: string[] = [];
                 for (var k in response.data.ModelState) {

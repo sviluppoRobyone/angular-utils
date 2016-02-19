@@ -27,9 +27,8 @@ declare module Au {
         }
     }
     module Errors {
-        import IHttpPromiseCallbackArg = angular.IHttpPromiseCallbackArg;
         interface IGetErrors<T> {
-            (promise: angular.IDeferred<string[]>, resp: T): void;
+            (promise: angular.IDeferred<string[]>, resp: angular.IHttpPromiseCallbackArg<T>): void;
         }
         var defaultError: IGetErrors<any>;
         module dotnet {
@@ -40,7 +39,7 @@ declare module Au {
                 };
             }
         }
-        var dotnetMvcError: IGetErrors<IHttpPromiseCallbackArg<dotnet.IModelState>>;
+        var dotnetMvcError: IGetErrors<dotnet.IModelState>;
     }
     module Button {
         class ActionButtonConfig {

@@ -39,8 +39,8 @@
     "!dist/AuHttpDateFix.js.map"
   ],
   "dependencies": {
-    "angular": "~1.4.9",
-    "jquery": "~2.2.0",
+    "angular": "~1.5.0",
+    "jquery": "~2.2.1",
     "bootstrap": "~3.3.6",
     "components-font-awesome": "~4.5.0",
     "bootstrap-datepicker": "~1.6.0"

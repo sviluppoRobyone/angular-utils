@@ -120,6 +120,7 @@ declare module Au {
             model: any;
             filename: any;
             required: any;
+            readonly: any;
             type: any;
             hasPattern: boolean;
             private defaultPattern;
@@ -131,6 +132,8 @@ declare module Au {
             hasHelpText: boolean;
             hasMaxLength: boolean;
             maxLength: any;
+            hasMinLength: boolean;
+            minLength: any;
             placeholder: any;
             multiline: boolean;
             debug: boolean;

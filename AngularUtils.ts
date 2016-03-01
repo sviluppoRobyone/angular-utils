@@ -328,10 +328,10 @@
          
             <div ng-class="{'input-group':Ctrl.hasAnyAddon}">
                 <span class="input-group-addon" ng-if="Ctrl.hasAddonLeft">{{Ctrl.addonLeft}}</span>
-                <input ng-if="!Ctrl.multiline && !Ctrl.IsInputFile && !Ctrl.IsSelect"  ng-attr-type="{{Ctrl.type}}" ng-model="Ctrl.model" class="form-control" name="${InputCtrl.fieldName}" ng-attr-maxlength="{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}" ng-pattern="Ctrl.getPattern()" ng-required="Ctrl.required" ng-attr-placeholder="{{Ctrl.placeholder?Ctrl.placeholder:undefined}}" ng-attr-min="{{Ctrl.minMaxEnabled && Ctrl.min ?Ctrl.min:undefined}}"  ng-attr-max="{{Ctrl.minMaxEnabled && Ctrl.max ? Ctrl.max:undefined}}" />
+                <input ng-readonly="Ctrl.readonly" ng-if="!Ctrl.multiline && !Ctrl.IsInputFile && !Ctrl.IsSelect"  ng-attr-type="{{Ctrl.type}}" ng-model="Ctrl.model" class="form-control" name="${InputCtrl.fieldName}" ng-attr-maxlength="{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}" ng-attr-minlength="{{Ctrl.hasMinLength?Ctrl.minLength:undefined}}" ng-pattern="Ctrl.getPattern()" ng-required="Ctrl.required" ng-attr-placeholder="{{Ctrl.placeholder?Ctrl.placeholder:undefined}}" ng-attr-min="{{Ctrl.minMaxEnabled && Ctrl.min ?Ctrl.min:undefined}}"  ng-attr-max="{{Ctrl.minMaxEnabled && Ctrl.max ? Ctrl.max:undefined}}" />
                 <input type="file" class="form-control" name="${InputCtrl.fieldName}" ng-model="Ctrl.model" ng-if="Ctrl.IsInputFile" fileread="Ctrl.model" filename="Ctrl.filename"  ng-required="Ctrl.required" />
-                <textarea ng-if="Ctrl.multiline" ng-model="Ctrl.model" class="form-control" name="${InputCtrl.fieldName}" ng-attr-maxlength="{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}" ng-pattern="Ctrl.getPattern()" ng-required="Ctrl.required" ng-attr-placeholder="{{Ctrl.placeholder?Ctrl.placeholder:undefined}}" ></textarea>
-                <select name="${InputCtrl.fieldName}" class="form-control" ng-if="Ctrl.IsSelect" ng-options="{{Ctrl.optionsExpression}}" ng-model="Ctrl.model"  ng-required="Ctrl.required">
+                <textarea ng-if="Ctrl.multiline" ng-model="Ctrl.model" class="form-control" name="${InputCtrl.fieldName}" ng-attr-maxlength="{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}" ng-attr-minlength="{{Ctrl.hasMinLength?Ctrl.minLength:undefined}}" ng-pattern="Ctrl.getPattern()" ng-required="Ctrl.required" ng-readonly="Ctrl.readonly" ng-attr-placeholder="{{Ctrl.placeholder?Ctrl.placeholder:undefined}}" ></textarea>
+                <select name="${InputCtrl.fieldName}" ng-readonly="Ctrl.readonly" class="form-control" ng-if="Ctrl.IsSelect" ng-options="{{Ctrl.optionsExpression}}" ng-model="Ctrl.model"  ng-required="Ctrl.required">
                 </select>
                 <span class="input-group-addon" ng-if="Ctrl.hasAddonRight">{{Ctrl.addonRight}}</span>
             </div>
@@ -348,6 +348,8 @@
             <span ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.pattern">{{Ctrl.patternText}}</span>
             <span ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.min">Valore minimo: {{Ctrl.min}}</span>
             <span ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.max">Valore massimo: {{Ctrl.max}}</span>
+            <span ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.minLength">Lunghezza minima: {{Ctrl.minLength}} caratteri</span>
+            <span ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.maxLength">Lunghezza massima: {{Ctrl.maxLength}} caratteri</span>
         </p>
         <p class="help-block" ng-if="Ctrl.hasHelpText">{{Ctrl.helpText}}</p>
 
@@ -443,6 +445,9 @@
                 get required() {
                     return true && this.$scope.hasOwnProperty("required") && this.$scope["required"];
                 }
+                 get readonly() {
+                    return true && this.$scope.hasOwnProperty("readonly") && this.$scope["readonly"];
+                }
                 get type() {
                     return this.$scope["type"] || "text";
                 }
@@ -475,6 +480,18 @@
                 get maxLength() {
                     return this.$scope["maxLength"] || null;
                 }
+
+
+
+                get hasMinLength() {
+                    return this.maxLength != null;
+                }
+                get minLength() {
+                    return this.$scope["minLength"] || null;
+                }
+
+
+
                 get placeholder() {
                     return this.$scope["placeholder"] || null;
                 }

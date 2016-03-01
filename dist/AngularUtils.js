@@ -549,7 +549,7 @@ var Au;
             });
             Object.defineProperty(InputCtrl.prototype, "hasMinLength", {
                 get: function () {
-                    return this.maxLength != null;
+                    return this.minLength != null;
                 },
                 enumerable: true,
                 configurable: true

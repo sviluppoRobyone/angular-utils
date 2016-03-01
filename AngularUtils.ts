@@ -484,7 +484,7 @@
 
 
                 get hasMinLength() {
-                    return this.maxLength != null;
+                    return this.minLength != null;
                 }
                 get minLength() {
                     return this.$scope["minLength"] || null;

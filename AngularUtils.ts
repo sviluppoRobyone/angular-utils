@@ -343,14 +343,14 @@
              <span class="glyphicon glyphicon-warning-sign form-control-feedback" ng-if="Ctrl.hasWarnigClass" aria-hidden="true"></span>
         </div>
 
-        <p class="help-block" ng-show="${InputCtrl.formName}.${InputCtrl.fieldName}.$dirty && ${InputCtrl.formName}.${InputCtrl.fieldName}.$invalid">
-            <span ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.required">{{Ctrl.requiredText}}</span>
-            <span ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.pattern">{{Ctrl.patternText}}</span>
-            <span ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.min">Valore minimo: {{Ctrl.min}}</span>
-            <span ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.max">Valore massimo: {{Ctrl.max}}</span>
-            <span ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.minLength">Lunghezza minima: {{Ctrl.minLength}} caratteri</span>
-            <span ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.maxLength">Lunghezza massima: {{Ctrl.maxLength}} caratteri</span>
-        </p>
+        <ul class="help-block list-unstyled" ng-show="${InputCtrl.formName}.${InputCtrl.fieldName}.$dirty && ${InputCtrl.formName}.${InputCtrl.fieldName}.$invalid">
+            <li ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.required">{{Ctrl.requiredText}}</li>
+            <li ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.pattern">{{Ctrl.patternText}}</li>
+            <li ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.min">Valore minimo: {{Ctrl.min}}</li>
+            <li ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.max">Valore massimo: {{Ctrl.max}}</li>
+            <li ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.minlength">Lunghezza minima: {{Ctrl.minLength}} caratteri</li>
+            <li ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.maxlength">Lunghezza massima: {{Ctrl.maxLength}} caratteri</li>
+        </ul>
         <p class="help-block" ng-if="Ctrl.hasHelpText">{{Ctrl.helpText}}</p>
 
     </div>
@@ -405,12 +405,15 @@
                         hasLabel: this.hasLabel,
                         model: this.model,
                         required: this.required,
+                        readonly:this.readonly,
                         requiredText: this.requiredText,
                         pattern: this.getPattern(),
                         hasPattern: this.hasPattern,
                         patternText: this.patternText,
                         hasMaxLength: this.hasMaxLength,
                         maxLength: this.maxLength,
+                        hasMinLength: this.hasMinLength,
+                        minLength: this.minLength,
                         hasHelpText: this.hasHelpText,
                         helpText: this.helpText,
                         min: this.min,
@@ -568,6 +571,7 @@
                         scope: {
                             auInput: "=",
                             required: "=?",
+                            readonly: "=?",
                             label: "=?",
                             type: "=?",
                             requiredText: "=?",
@@ -575,6 +579,7 @@
                             pattern: "=?",
                             helpText: "=?",
                             maxLength: "=?",
+                            minLength: "=?",
                             placeholder: "=?",
                             min: "=?",
                             max: "=?",

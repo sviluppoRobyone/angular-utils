@@ -97,12 +97,15 @@ declare module Au {
                 hasLabel: boolean;
                 model: any;
                 required: any;
+                readonly: any;
                 requiredText: any;
                 pattern: any;
                 hasPattern: boolean;
                 patternText: any;
                 hasMaxLength: boolean;
                 maxLength: any;
+                hasMinLength: boolean;
+                minLength: any;
                 hasHelpText: boolean;
                 helpText: any;
                 min: any;

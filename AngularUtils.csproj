@@ -40,6 +40,7 @@
     <Content Include="bower_components\jquery\dist\jquery.js" />
     <Content Include="dist\AngularUtils.js" />
     <Content Include="dist\auDatepicker.js" />
+    <Content Include="dist\auHelper.js" />
     <Content Include="dist\AuHttpDateFix.js" />
     <Content Include="dist\demo.js" />
     <Content Include="index.html" />
@@ -49,6 +50,7 @@
     <TypeScriptCompile Include="auDatepicker.ts" />
     <TypeScriptCompile Include="AngularUtils.ts" />
     <TypeScriptCompile Include="AuHttpDateFix.ts" />
+    <TypeScriptCompile Include="auHelper.ts" />
     <TypeScriptCompile Include="demo.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-animate.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-component-router.d.ts" />
@@ -83,6 +85,7 @@
     <Content Include="bower_components\components-font-awesome\fonts\FontAwesome.otf" />
     <Content Include="dist\auDatepicker.js.map" />
     <Content Include="dist\AuHttpDateFix.js.map" />
+    <Content Include="dist\auHelper.js.map" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

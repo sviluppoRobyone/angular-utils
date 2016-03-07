@@ -791,7 +791,8 @@ var Au;
             new Au.Http.HttpEventsConfig($injector);
         }
     ])
-        .directive("compareTo", ["$log", function ($log) {
+        .directive("compareTo", [
+        "$log", function ($log) {
             return {
                 require: "ngModel",
                 scope: {
@@ -809,7 +810,8 @@ var Au;
                     });
                 }
             };
-        }])
+        }
+    ])
         .directive(Au.Http.ToggleOnHttpActivity.DirectiveName, Au.Http.ToggleOnHttpActivity.Directive)
         .directive(Au.Input.InputCtrl.directiveName, Au.Input.InputCtrl.directive)
         .service(Au.Button.ActionButtonConfig.serviceName, Au.Button.ActionButtonConfig)

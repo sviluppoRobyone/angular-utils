@@ -38,7 +38,12 @@
                         <div au-input="Ctrl.data.dateInput" label="'Date Input'" type="'date'" required="true"></div>
 
 
+
                         <div au-input="Ctrl.data.fileContent" label="'File Input'" type="'file'" filename="Ctrl.data.fileName" required="true"></div>
+
+                        <hr/>
+                        <div au-input="Ctrl.data.password" label="'Password'" type="'password'" required="true" debug="true"></div>
+                        <div au-input="Ctrl.data.passwordCheck" label="'Password Check'" type="'password'" required="true" compare="Ctrl.data.password" debug="true"></div>
 
                         <span au-button text="'Update'" action="Ctrl.Update()" form="demoForm"></span>
                     </div>

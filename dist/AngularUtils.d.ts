@@ -117,6 +117,8 @@ declare module Au {
                 optionsValue: any;
                 optionsLabel: any;
                 optionsExpression: string;
+                compare: any;
+                hasCompare: boolean;
             };
             label: any;
             hasLabel: boolean;
@@ -159,6 +161,8 @@ declare module Au {
             optionsGroup: any;
             optionsExpression: string;
             autocomplete: any;
+            hasCompare: boolean;
+            compare: any;
             static directive(): ng.IDirective;
         }
     }

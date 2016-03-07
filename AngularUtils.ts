@@ -328,7 +328,7 @@
          
             <div ng-class="{'input-group':Ctrl.hasAnyAddon}">
                 <span class="input-group-addon" ng-if="Ctrl.hasAddonLeft">{{Ctrl.addonLeft}}</span>
-                <input ng-readonly="Ctrl.readonly" ng-if="!Ctrl.multiline && !Ctrl.IsInputFile && !Ctrl.IsSelect"  ng-attr-type="{{Ctrl.type}}" ng-model="Ctrl.model" class="form-control" name="${InputCtrl.fieldName}" ng-attr-maxlength="{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}" ng-attr-minlength="{{Ctrl.hasMinLength?Ctrl.minLength:undefined}}" ng-pattern="Ctrl.getPattern()" ng-required="Ctrl.required" ng-attr-placeholder="{{Ctrl.placeholder?Ctrl.placeholder:undefined}}" ng-attr-min="{{Ctrl.minMaxEnabled && Ctrl.min ?Ctrl.min:undefined}}"  ng-attr-max="{{Ctrl.minMaxEnabled && Ctrl.max ? Ctrl.max:undefined}}" />
+                <input ng-readonly="Ctrl.readonly" ng-if="!Ctrl.multiline && !Ctrl.IsInputFile && !Ctrl.IsSelect"  ng-attr-type="{{Ctrl.type}}" ng-model="Ctrl.model" class="form-control" name="${InputCtrl.fieldName}" ng-attr-maxlength="{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}" ng-attr-minlength="{{Ctrl.hasMinLength?Ctrl.minLength:undefined}}" ng-pattern="Ctrl.getPattern()" ng-required="Ctrl.required" ng-attr-placeholder="{{Ctrl.placeholder?Ctrl.placeholder:undefined}}" ng-attr-min="{{Ctrl.minMaxEnabled && Ctrl.min ?Ctrl.min:undefined}}"  ng-attr-max="{{Ctrl.minMaxEnabled && Ctrl.max ? Ctrl.max:undefined}}" ng-attr-compare-to="Ctrl.hasCompare?Ctrl.compare:undefined" />
                 <input type="file" class="form-control" name="${InputCtrl.fieldName}" ng-model="Ctrl.model" ng-if="Ctrl.IsInputFile" fileread="Ctrl.model" filename="Ctrl.filename"  ng-required="Ctrl.required" />
                 <textarea ng-if="Ctrl.multiline" ng-model="Ctrl.model" class="form-control" name="${InputCtrl.fieldName}" ng-attr-maxlength="{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}" ng-attr-minlength="{{Ctrl.hasMinLength?Ctrl.minLength:undefined}}" ng-pattern="Ctrl.getPattern()" ng-required="Ctrl.required" ng-readonly="Ctrl.readonly" ng-attr-placeholder="{{Ctrl.placeholder?Ctrl.placeholder:undefined}}" ></textarea>
                 <select name="${InputCtrl.fieldName}" ng-readonly="Ctrl.readonly" class="form-control" ng-if="Ctrl.IsSelect" ng-options="{{Ctrl.optionsExpression}}" ng-model="Ctrl.model"  ng-required="Ctrl.required">
@@ -350,6 +350,7 @@
             <li ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.max">Valore massimo: {{Ctrl.max}}</li>
             <li ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.minlength">Lunghezza minima: {{Ctrl.minLength}} caratteri</li>
             <li ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.maxlength">Lunghezza massima: {{Ctrl.maxLength}} caratteri</li>
+            <li ng-if="${InputCtrl.formName}.${InputCtrl.fieldName}.$error.compareTo">Le password non coincidono</li>
         </ul>
         <p class="help-block" ng-if="Ctrl.hasHelpText">{{Ctrl.helpText}}</p>
 
@@ -424,7 +425,9 @@
                         optionsGroup: this.optionsGroup,
                         optionsValue: this.optionsValue,
                         optionsLabel: this.optionsLabel,
-                        optionsExpression: this.optionsExpression
+                        optionsExpression: this.optionsExpression,
+                        compare:this.compare,
+                        hasCompare:this.hasCompare
                     }
                 }
                 get label() {
@@ -561,6 +564,14 @@
                 get autocomplete() {
                     return this.$scope["autocomplete"] ? this.$scope["autocomplete"] : false;
                 }
+                
+                get hasCompare():boolean {
+                    return this.$scope.hasOwnProperty("compare");
+                }
+                get compare() {
+                   //se non c'è confronto con se stesso e va sempre bene
+                    return this.hasCompare?this.$scope["compare"]:this.model;
+                }
 
                 static directive() {
                     return <angular.IDirective>{
@@ -591,7 +602,8 @@
                             optionsLabel: "=?",
                             optionsValue: "=?",
                             optionsGroup: "=?",
-                            autocomplete: "=?"
+                            autocomplete: "=?",
+                            compare:"=?"
                         }
                     };
                 }
@@ -605,11 +617,39 @@
 (() => {
 
     angular.module(Au.moduleName, [])
-        .factory(Au.Http.HttpEvents.InterceptorName, ["$injector", ($injector: angular.auto.IInjectorService) => {
-            return new Au.Http.HttpEvents($injector);
-        }])
-        .config(["$injector", ($injector: angular.auto.IInjectorService) => {
-            new Au.Http.HttpEventsConfig($injector)
+        .factory(Au.Http.HttpEvents.InterceptorName, [
+            "$injector", ($injector: angular.auto.IInjectorService) => {
+                return new Au.Http.HttpEvents($injector);
+            }
+        ])
+        .config([
+            "$injector", ($injector: angular.auto.IInjectorService) => {
+                new Au.Http.HttpEventsConfig($injector)
+            }
+        ])
+
+        //http://odetocode.com/blogs/scott/archive/2014/10/13/confirm-password-validation-in-angularjs.aspx
+        .directive("compareTo",["$log", ($log:angular.ILogService) => {
+            return <angular.IDirective>{
+                require: "ngModel",
+                scope: {
+                    otherModelValue: "=compareTo"
+                },
+                link:  (scope, element, attributes, ngModel:angular.INgModelController)=> {
+
+                    ngModel.$validators["compareTo"] = (modelValue) => {
+                       
+                        var arr = [modelValue, scope.otherModelValue];
+                        $log.debug("compare ", modelValue, scope.otherModelValue);
+                        //finché ce n'é uno di vuoto va bene perché si presuppone che ci sia l'attributo required
+                        return arr.some(x=> typeof x == "undefined") ||  arr.some(x=> x==null)|| modelValue == scope.otherModelValue;
+                    };
+
+                    scope.$watch("otherModelValue",  ()=> {
+                        ngModel.$validate();
+                    });
+                }
+            };
         }])
         .directive(Au.Http.ToggleOnHttpActivity.DirectiveName, Au.Http.ToggleOnHttpActivity.Directive)
         .directive(Au.Input.InputCtrl.directiveName, Au.Input.InputCtrl.directive)

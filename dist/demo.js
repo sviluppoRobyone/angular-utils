@@ -15,7 +15,9 @@ var angularUtils;
                     textInput: "",
                     dateInput: null,
                     fileContent: null,
-                    fileName: null
+                    fileName: null,
+                    password: null,
+                    passwordCheck: null
                 };
                 this.pattern = /^\w+\.\w+$/;
                 this.args = null;

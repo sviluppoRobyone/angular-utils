@@ -9,6 +9,8 @@
             fileContent: string;
             dateInput:Date;
             fileName:string;
+            password:string;
+            passwordCheck:string;
         }
 
         export class DemoController {
@@ -21,7 +23,9 @@
                 textInput: "",
                 dateInput:null,
                 fileContent: null,
-                fileName:null
+                fileName:null,
+                password:null,
+                passwordCheck:null
             };
             pattern=/^\w+\.\w+$/;
             args:any=null;

@@ -8,6 +8,8 @@ declare module angularUtils {
             fileContent: string;
             dateInput: Date;
             fileName: string;
+            password: string;
+            passwordCheck: string;
         }
         class DemoController {
             static $inject: string[];

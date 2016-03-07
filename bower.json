@@ -16,7 +16,11 @@
 
     "./dist/AuHttpDateFix.js",
     "./dist/AuHttpDateFix.d.ts",
-    "./dist/AuHttpDateFix.js.map"
+    "./dist/AuHttpDateFix.js.map",
+
+    "./dist/auHelper.js",
+    "./dist/auHelper.d.ts",
+    "./dist/auHelper.js.map"
 
   ],
   "moduleType": [
@@ -36,7 +40,11 @@
 
     "!dist/AuHttpDateFix.js",
     "!dist/AuHttpDateFix.d.ts",
-    "!dist/AuHttpDateFix.js.map"
+    "!dist/AuHttpDateFix.js.map",
+
+    "!dist/auHelper.js",
+    "!dist/auHelper.d.ts",
+    "!dist/auHelper.js.map"
   ],
   "dependencies": {
     "angular": "~1.5.0",

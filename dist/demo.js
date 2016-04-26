@@ -46,7 +46,7 @@ var angularUtils;
             };
             DemoController.$inject = ["$q", "$timeout"];
             return DemoController;
-        })();
+        }());
         demo.DemoController = DemoController;
     })(demo = angularUtils.demo || (angularUtils.demo = {}));
 })(angularUtils || (angularUtils = {}));

@@ -70,7 +70,7 @@ var Au;
             };
             Intercept.InterceptorName = "dateFixInterceptor";
             return Intercept;
-        })();
+        }());
         HttpDateFix.Intercept = Intercept;
         var InterceptConfig = (function () {
             function InterceptConfig($injector) {
@@ -89,7 +89,7 @@ var Au;
                 this.$httpProvider.interceptors.push(Intercept.InterceptorName);
             };
             return InterceptConfig;
-        })();
+        }());
         HttpDateFix.InterceptConfig = InterceptConfig;
     })(HttpDateFix = Au.HttpDateFix || (Au.HttpDateFix = {}));
 })(Au || (Au = {}));

@@ -74,7 +74,7 @@ var Au;
             HttpEvents.EventProgress = "loading:progress";
             HttpEvents.EventFinish = "loading:finish";
             return HttpEvents;
-        })();
+        }());
         Http.HttpEvents = HttpEvents;
         var HttpEventsConfig = (function () {
             function HttpEventsConfig($injector) {
@@ -93,7 +93,7 @@ var Au;
                 this.$httpProvider.interceptors.push(HttpEvents.InterceptorName);
             };
             return HttpEventsConfig;
-        })();
+        }());
         Http.HttpEventsConfig = HttpEventsConfig;
         var ToggleOnHttpActivity = (function () {
             function ToggleOnHttpActivity() {
@@ -115,7 +115,7 @@ var Au;
             };
             ToggleOnHttpActivity.DirectiveName = "auHttpActivity";
             return ToggleOnHttpActivity;
-        })();
+        }());
         Http.ToggleOnHttpActivity = ToggleOnHttpActivity;
     })(Http = Au.Http || (Au.Http = {}));
     var Errors;
@@ -146,7 +146,7 @@ var Au;
             }
             ActionButtonConfig.serviceName = "auButtonConfig";
             return ActionButtonConfig;
-        })();
+        }());
         Button.ActionButtonConfig = ActionButtonConfig;
         var ActionButtonCtrl = (function () {
             function ActionButtonCtrl() {
@@ -317,7 +317,7 @@ var Au;
             ActionButtonCtrl.$inject = ["$scope", "$timeout", "$element", "auButtonConfig", "$q"];
             ActionButtonCtrl.template = "\n            \n            <button ng-disabled=\"!Ctrl.enabled\" ng-click=\"Ctrl.Click()\" class=\"btn {{Ctrl.type}}\">\n                    <i class=\"fa fa-spin fa-spinner\" ng-show=\"Ctrl.running\"></i>\n                    <i class=\"fa fa-check\" ng-show=\"Ctrl.done\"></i>\n                    <i class=\"fa fa-times\" ng-show=\"Ctrl.error\"></i>\n                 {{Ctrl.text}}\n            </button>\n\n\n";
             return ActionButtonCtrl;
-        })();
+        }());
         Button.ActionButtonCtrl = ActionButtonCtrl;
     })(Button = Au.Button || (Au.Button = {}));
     var Input;
@@ -775,7 +775,7 @@ var Au;
             InputCtrl.template = "\n\n<div class=\"input-text\" ng-form=\"" + InputCtrl.formName + "\" ng-class=\"{'well well-sm':Ctrl.debug}\">\n    <div class=\"form-group\" ng-class=\"{'has-error':Ctrl.hasErrorClass,'has-success':Ctrl.hasSuccessClass,'has-feedback':Ctrl.hasFeedbackIcon,'has-warning':Ctrl.hasWarnigClass}\">\n        \n        <div ng-if=\"Ctrl.IsInputCheckbox\" class=\"checkbox\">\n            <label>\n                <input type=\"checkbox\" name=\"" + InputCtrl.formName + "\" ng-model=\"Ctrl.model\" ng-required=\"Ctrl.required\" /> {{Ctrl.label}} \n                <span ng-if=\"Ctrl.hasFeedbackIcon\">\n                    <i class=\"glyphicon\" ng-class=\"{'glyphicon-ok':Ctrl.hasSuccessClass,'glyphicon-asterisk':Ctrl.hasRequiredIcon,'glyphicon-warning-sign':Ctrl.hasWarnigClass}\"></i>\n                </span>\n            </label>\n\n        </div>\n        <div ng-if=\"!Ctrl.IsInputCheckbox\">      \n\n       \n            <label class=\"control-label\" ng-if=\"Ctrl.hasLabel\">{{Ctrl.label}}</label>\n         \n            <div ng-class=\"{'input-group':Ctrl.hasAnyAddon}\">\n                <span class=\"input-group-addon\" ng-if=\"Ctrl.hasAddonLeft\">{{Ctrl.addonLeft}}</span>\n                <input ng-readonly=\"Ctrl.readonly\" ng-if=\"!Ctrl.multiline && !Ctrl.IsInputFile && !Ctrl.IsSelect\"  ng-attr-type=\"{{Ctrl.type}}\" ng-model=\"Ctrl.model\" class=\"form-control\" name=\"" + InputCtrl.fieldName + "\" ng-attr-maxlength=\"{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}\" ng-attr-minlength=\"{{Ctrl.hasMinLength?Ctrl.minLength:undefined}}\" ng-pattern=\"Ctrl.getPattern()\" ng-required=\"Ctrl.required\" ng-attr-placeholder=\"{{Ctrl.placeholder?Ctrl.placeholder:undefined}}\" ng-attr-min=\"{{Ctrl.minMaxEnabled && Ctrl.min ?Ctrl.min:undefined}}\"  ng-attr-max=\"{{Ctrl.minMaxEnabled && Ctrl.max ? Ctrl.max:undefined}}\" ng-attr-compare-to=\"Ctrl.hasCompare?Ctrl.compare:undefined\" />\n                <input type=\"file\" class=\"form-control\" name=\"" + InputCtrl.fieldName + "\" ng-model=\"Ctrl.model\" ng-if=\"Ctrl.IsInputFile\" fileread=\"Ctrl.model\" filename=\"Ctrl.filename\"  ng-required=\"Ctrl.required\" />\n                <textarea ng-if=\"Ctrl.multiline\" ng-model=\"Ctrl.model\" class=\"form-control\" name=\"" + InputCtrl.fieldName + "\" ng-attr-maxlength=\"{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}\" ng-attr-minlength=\"{{Ctrl.hasMinLength?Ctrl.minLength:undefined}}\" ng-pattern=\"Ctrl.getPattern()\" ng-required=\"Ctrl.required\" ng-readonly=\"Ctrl.readonly\" ng-attr-placeholder=\"{{Ctrl.placeholder?Ctrl.placeholder:undefined}}\" ></textarea>\n                <select name=\"" + InputCtrl.fieldName + "\" ng-readonly=\"Ctrl.readonly\" class=\"form-control\" ng-if=\"Ctrl.IsSelect\" ng-options=\"{{Ctrl.optionsExpression}}\" ng-model=\"Ctrl.model\"  ng-required=\"Ctrl.required\">\n                </select>\n                <span class=\"input-group-addon\" ng-if=\"Ctrl.hasAddonRight\">{{Ctrl.addonRight}}</span>\n            </div>\n\n            <span title=\"Campo Richiesto\" class=\"glyphicon glyphicon-asterisk form-control-feedback\" ng-if=\"Ctrl.hasRequiredIcon\" aria-hidden=\"true\"></span>\n            <span class=\"glyphicon glyphicon-ok form-control-feedback\" ng-if=\"Ctrl.hasSuccessClass\" aria-hidden=\"true\"></span>\n\n\n             <span class=\"glyphicon glyphicon-warning-sign form-control-feedback\" ng-if=\"Ctrl.hasWarnigClass\" aria-hidden=\"true\"></span>\n        </div>\n\n        <ul class=\"help-block list-unstyled\" ng-show=\"" + InputCtrl.formName + "." + InputCtrl.fieldName + ".$dirty && " + InputCtrl.formName + "." + InputCtrl.fieldName + ".$invalid\">\n            <li ng-if=\"" + InputCtrl.formName + "." + InputCtrl.fieldName + ".$error.required\">{{Ctrl.requiredText}}</li>\n            <li ng-if=\"" + InputCtrl.formName + "." + InputCtrl.fieldName + ".$error.pattern\">{{Ctrl.patternText}}</li>\n            <li ng-if=\"" + InputCtrl.formName + "." + InputCtrl.fieldName + ".$error.min\">Valore minimo: {{Ctrl.min}}</li>\n            <li ng-if=\"" + InputCtrl.formName + "." + InputCtrl.fieldName + ".$error.max\">Valore massimo: {{Ctrl.max}}</li>\n            <li ng-if=\"" + InputCtrl.formName + "." + InputCtrl.fieldName + ".$error.minlength\">Lunghezza minima: {{Ctrl.minLength}} caratteri</li>\n            <li ng-if=\"" + InputCtrl.formName + "." + InputCtrl.fieldName + ".$error.maxlength\">Lunghezza massima: {{Ctrl.maxLength}} caratteri</li>\n            <li ng-if=\"" + InputCtrl.formName + "." + InputCtrl.fieldName + ".$error.compareTo\">Le password non coincidono</li>\n        </ul>\n        <p class=\"help-block\" ng-if=\"Ctrl.hasHelpText\">{{Ctrl.helpText}}</p>\n\n    </div>\n   \n    <pre ng-if=\"Ctrl.debug\" class=\"pre-scrollable\">{{Ctrl.json|json}}</pre>\n</div>\n\n\n\n";
             InputCtrl.$inject = ["$scope"];
             return InputCtrl;
-        })();
+        }());
         Input.InputCtrl = InputCtrl;
     })(Input = Au.Input || (Au.Input = {}));
 })(Au || (Au = {}));

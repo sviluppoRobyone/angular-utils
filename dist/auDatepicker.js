@@ -78,7 +78,7 @@ var Au;
             };
             DatepickerFallback.$inject = ["$injector"];
             return DatepickerFallback;
-        })();
+        }());
         Datepicker.DatepickerFallback = DatepickerFallback;
     })(Datepicker = Au.Datepicker || (Au.Datepicker = {}));
 })(Au || (Au = {}));

@@ -20,6 +20,7 @@ declare module Au {
             $locale: angular.ILocaleService;
             $interval: angular.IIntervalService;
             $log: angular.ILogService;
+            manageAjaxLoading(before: Function, ajax: (ok: angular.IQResolveReject<any>, ko: angular.IQResolveReject<any>) => void, after: Function): ng.IPromise<{}>;
             onScopeDispose($scope: angular.IScope): ng.IPromise<{}>;
             getRouteParamsAsNumber(name: string): number;
         }

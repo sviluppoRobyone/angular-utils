@@ -57,6 +57,40 @@
                 return this.getFromInject("$log");
             }
 
+            manageAjaxLoading(before: Function, ajax: (ok: angular.IQResolveReject<any>, ko: angular.IQResolveReject<any>) => void, after: Function) {
+
+                var qBefore = this.$q.defer();
+                var qAjax = this.$q.defer();
+                var qAfter = this.$q.defer();
+
+                var doBefore = () => {
+                    this.$timeout(() => {
+                        before && before();
+                    }).then(() => {
+                        qBefore.resolve();
+                    });
+                }
+                var doAfter = () => {
+                    this.$timeout(() => {
+                        after && after();
+                    }).then(() => {
+                        qAfter.resolve();
+                    });
+                }
+                qBefore.promise.then(() => {
+                    ajax(qAjax.resolve, qAjax.reject);
+                });
+                qAjax.promise.then(() => {
+                    doAfter();
+                });
+
+                return this.$q((ok, ko) => {
+                    qAfter.promise.then(() => {
+                        ok();
+                    });
+                    doBefore();
+                })
+            }
             onScopeDispose($scope: angular.IScope) {
                 var q = this.$q.defer();
                 $scope.$on("$destroy", () => {

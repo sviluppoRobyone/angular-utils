@@ -109,6 +109,38 @@ var Au;
                 enumerable: true,
                 configurable: true
             });
+            ngUtils.prototype.manageAjaxLoading = function (before, ajax, after) {
+                var _this = this;
+                var qBefore = this.$q.defer();
+                var qAjax = this.$q.defer();
+                var qAfter = this.$q.defer();
+                var doBefore = function () {
+                    _this.$timeout(function () {
+                        before && before();
+                    }).then(function () {
+                        qBefore.resolve();
+                    });
+                };
+                var doAfter = function () {
+                    _this.$timeout(function () {
+                        after && after();
+                    }).then(function () {
+                        qAfter.resolve();
+                    });
+                };
+                qBefore.promise.then(function () {
+                    ajax(qAjax.resolve, qAjax.reject);
+                });
+                qAjax.promise.then(function () {
+                    doAfter();
+                });
+                return this.$q(function (ok, ko) {
+                    qAfter.promise.then(function () {
+                        ok();
+                    });
+                    doBefore();
+                });
+            };
             ngUtils.prototype.onScopeDispose = function ($scope) {
                 var q = this.$q.defer();
                 $scope.$on("$destroy", function () {

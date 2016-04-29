@@ -145,14 +145,14 @@ var Au;
                 var s = this.$location.search();
                 (cfg.BooleanProperties || []).forEach(function (p) {
                     //dall'url mi perdo il valore boolean, mi arrivano come stringhe
-                    if (s[p] !== null && typeof (s[p]) == typeof ("")) {
+                    if (s[p] && angular.isString(s[p])) {
                         s[p] = s[p] == "True";
                     }
                 });
                 //this.$ngUtils.$log.info(this.ModuloRicerca);
                 //se l'array è di un solo elemento mi arriva come stringa
                 (cfg.ArrayProperties || []).forEach(function (p) {
-                    if (s[p] !== null && !angular.isArray(s[p])) {
+                    if (s[p] && angular.isString(s[p])) {
                         s[p] = [s[p]];
                     }
                 });

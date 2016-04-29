@@ -98,17 +98,20 @@
 
                 (cfg.BooleanProperties||[]).forEach(p => {
                     //dall'url mi perdo il valore boolean, mi arrivano come stringhe
-                    if (s[p] !== null && typeof (s[p]) == typeof ("")) {
+                    if (s[p] && angular.isString(s[p])) {
                         s[p] = s[p] == "True";
                     }
                 });
                 //this.$ngUtils.$log.info(this.ModuloRicerca);
                 //se l'array è di un solo elemento mi arriva come stringa
                 (cfg.ArrayProperties || []).forEach(p => {
-                    if (s[p] !== null && !angular.isArray(s[p])) {
-                       s[p] = [s[p]];
+                    
+                    if (s[p] && angular.isString(s[p])) {
+                        s[p]=[s[p]];
                     }
+                   
                 });
+
                 angular.merge(baseObj, s);
                 return baseObj;
             }
@@ -125,8 +128,8 @@
             }
         }
         export interface ILocationSearchNormalizer {
-            ArrayProperties: string[],
-            BooleanProperties: string[],
+            ArrayProperties?: string[],
+            BooleanProperties?: string[],
 
         }
         export class CtrlLoading {

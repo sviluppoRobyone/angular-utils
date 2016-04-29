@@ -26,8 +26,8 @@ declare module Au {
             getRouteParamsAsNumber(name: string): number;
         }
         interface ILocationSearchNormalizer {
-            ArrayProperties: string[];
-            BooleanProperties: string[];
+            ArrayProperties?: string[];
+            BooleanProperties?: string[];
         }
         class CtrlLoading {
             static DirectiveName: string;

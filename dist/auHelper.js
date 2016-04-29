@@ -141,6 +141,24 @@ var Au;
                     doBefore();
                 });
             };
+            ngUtils.prototype.normalizeLocationSearch = function (baseObj, cfg) {
+                var s = this.$location.search();
+                (cfg.BooleanProperties || []).forEach(function (p) {
+                    //dall'url mi perdo il valore boolean, mi arrivano come stringhe
+                    if (s[p] !== null && typeof (s[p]) == typeof ("")) {
+                        s[p] = s[p] == "True";
+                    }
+                });
+                //this.$ngUtils.$log.info(this.ModuloRicerca);
+                //se l'array è di un solo elemento mi arriva come stringa
+                (cfg.ArrayProperties || []).forEach(function (p) {
+                    if (s[p] !== null && !angular.isArray(s[p])) {
+                        s[p] = [s[p]];
+                    }
+                });
+                angular.merge(baseObj, s);
+                return baseObj;
+            };
             ngUtils.prototype.onScopeDispose = function ($scope) {
                 var q = this.$q.defer();
                 $scope.$on("$destroy", function () {

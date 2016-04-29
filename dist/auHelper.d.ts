@@ -21,8 +21,13 @@ declare module Au {
             $interval: angular.IIntervalService;
             $log: angular.ILogService;
             manageAjaxLoading(before: Function, ajax: (ok: angular.IQResolveReject<any>, ko: angular.IQResolveReject<any>) => void, after: Function): ng.IPromise<{}>;
+            normalizeLocationSearch<T>(baseObj: T, cfg: ILocationSearchNormalizer): T;
             onScopeDispose($scope: angular.IScope): ng.IPromise<{}>;
             getRouteParamsAsNumber(name: string): number;
+        }
+        interface ILocationSearchNormalizer {
+            ArrayProperties: string[];
+            BooleanProperties: string[];
         }
         class CtrlLoading {
             static DirectiveName: string;

@@ -91,6 +91,27 @@
                     doBefore();
                 })
             }
+
+            normalizeLocationSearch<T>(baseObj: T, cfg: ILocationSearchNormalizer): T {
+
+                var s = this.$location.search();
+
+                (cfg.BooleanProperties||[]).forEach(p => {
+                    //dall'url mi perdo il valore boolean, mi arrivano come stringhe
+                    if (s[p] !== null && typeof (s[p]) == typeof ("")) {
+                        s[p] = s[p] == "True";
+                    }
+                });
+                //this.$ngUtils.$log.info(this.ModuloRicerca);
+                //se l'array è di un solo elemento mi arriva come stringa
+                (cfg.ArrayProperties || []).forEach(p => {
+                    if (s[p] !== null && !angular.isArray(s[p])) {
+                       s[p] = [s[p]];
+                    }
+                });
+                angular.merge(baseObj, s);
+                return baseObj;
+            }
             onScopeDispose($scope: angular.IScope) {
                 var q = this.$q.defer();
                 $scope.$on("$destroy", () => {
@@ -102,6 +123,11 @@
             getRouteParamsAsNumber(name: string): number {
                 return parseInt(this.$routeParams[name] ? this.$routeParams[name] : "0");
             }
+        }
+        export interface ILocationSearchNormalizer {
+            ArrayProperties: string[],
+            BooleanProperties: string[],
+
         }
         export class CtrlLoading {
             static DirectiveName = "auLoading";

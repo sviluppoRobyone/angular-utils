@@ -29,15 +29,15 @@
                 /^\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2}(\.{1}\d{1,})?\d$/  //2016-02-18T23:00:00.00000
             ];
             private ApplyFix(obj: string) {
-                this.$log.debug(Intercept.InterceptorName, "Apply ", obj);
+                //this.$log.debug(Intercept.InterceptorName, "Apply ", obj);
                 obj = <string><any>(new Date(obj));
             }
             private SearchObj(obj: any): number {
-                this.$log.debug(Intercept.InterceptorName, "Search: ", obj);
+               // this.$log.debug(Intercept.InterceptorName, "Search: ", obj);
                
                 if (!obj) return 0;
                 var t = typeof obj;
-                this.$log.debug(Intercept.InterceptorName, "Type ", t);
+                //this.$log.debug(Intercept.InterceptorName, "Type ", t);
                 if (t == this.stringType) {
 
                     if (this.regexList.some(r => r.exec(obj) !== null)) {
@@ -48,7 +48,7 @@
                 }
                 
                 if (Array.isArray(obj)) {
-                    this.$log.debug(Intercept.InterceptorName, "Is Array", (<Array<any>>obj).length);
+                  //  this.$log.debug(Intercept.InterceptorName, "Is Array", (<Array<any>>obj).length);
                     return (<Array<any>>obj).map(p => this.SearchObj(p)).reduce((a, b) => {
                         return a + b;
                     },0);
@@ -58,7 +58,7 @@
 
                     var res = 0;
                     for (var propertyName in obj) {
-                        this.$log.debug(Intercept.InterceptorName, "Property["+propertyName+"]");
+                    //    this.$log.debug(Intercept.InterceptorName, "Property["+propertyName+"]");
                         if (obj[propertyName])
                             res += this.SearchObj(obj[propertyName]);
                     }
@@ -70,7 +70,7 @@
                 
         
                 if (response.headers("Content-Type") && response.headers("Content-Type").indexOf("application/json") > -1) {
-                    this.$log.debug(Intercept.InterceptorName, "Response: ", response);
+                   // this.$log.debug(Intercept.InterceptorName, "Response: ", response);
                     this.SearchObj(response.data);
                 }
                

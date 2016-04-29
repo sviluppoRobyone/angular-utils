@@ -12,41 +12,41 @@ var Au;
                 this.$injector = null;
                 this.loadingCount = 0;
                 this.request = function (config) {
-                    _this.$log.debug("get new request");
+                    // this.$log.debug("get new request");
                     _this.loadingCount++;
                     if (_this.loadingCount) {
-                        _this.$log.debug("Trigger loading progress");
+                        //   this.$log.debug("Trigger loading progress");
                         _this.$rootScope.$broadcast(HttpEvents.EventProgress);
                     }
                     return config || _this.$q.when(config);
                 };
                 this.response = function (response) {
-                    _this.$log.debug("get new response");
+                    //this.$log.debug("get new response");
                     _this.loadingCount--;
                     if (!_this.loadingCount) {
-                        _this.$log.debug("Trigger loading progress");
+                        //  this.$log.debug("Trigger loading progress");
                         _this.$rootScope.$broadcast(HttpEvents.EventFinish);
                     }
                     return response || _this.$q.when(response);
                 };
                 this.responseError = function (response) {
-                    _this.$log.debug("get new response error");
+                    //this.$log.debug("get new response error");
                     _this.loadingCount--;
                     if (!_this.loadingCount) {
-                        _this.$log.debug("Trigger loading finish");
+                        // this.$log.debug("Trigger loading finish");
                         _this.$rootScope.$broadcast(HttpEvents.EventFinish);
                     }
                     return _this.$q.reject(response);
                 };
                 this.$injector = $injector;
                 this.$rootScope.$on(HttpEvents.EventProgress, function () {
-                    _this.$log.debug("Detect loading progress");
+                    //this.$log.debug("Detect loading progress");
                 });
                 this.$rootScope.$on(HttpEvents.EventFinish, function () {
-                    _this.$log.debug("Detect loading finish");
+                    //this.$log.debug("Detect loading finish");
                 });
                 this.$rootScope.$watch(function () { return _this.loadingCount; }, function () {
-                    _this.$log.debug("Ajax count change ", _this.loadingCount);
+                    //this.$log.debug("Ajax count change ", this.loadingCount);
                 });
             }
             Object.defineProperty(HttpEvents.prototype, "$q", {
@@ -801,7 +801,7 @@ var Au;
                 link: function (scope, element, attributes, ngModel) {
                     ngModel.$validators["compareTo"] = function (modelValue) {
                         var arr = [modelValue, scope.otherModelValue];
-                        $log.debug("compare ", modelValue, scope.otherModelValue);
+                        // $log.debug("compare ", modelValue, scope.otherModelValue);
                         //finché ce n'é uno di vuoto va bene perché si presuppone che ci sia l'attributo required
                         return arr.some(function (x) { return typeof x == "undefined"; }) || arr.some(function (x) { return x == null; }) || modelValue == scope.otherModelValue;
                     };

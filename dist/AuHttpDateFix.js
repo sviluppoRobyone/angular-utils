@@ -14,7 +14,7 @@ var Au;
                 ];
                 this.response = function (response) {
                     if (response.headers("Content-Type") && response.headers("Content-Type").indexOf("application/json") > -1) {
-                        _this.$log.debug(Intercept.InterceptorName, "Response: ", response);
+                        // this.$log.debug(Intercept.InterceptorName, "Response: ", response);
                         _this.SearchObj(response.data);
                     }
                     return response || _this.$q.when(response);
@@ -36,16 +36,16 @@ var Au;
                 configurable: true
             });
             Intercept.prototype.ApplyFix = function (obj) {
-                this.$log.debug(Intercept.InterceptorName, "Apply ", obj);
+                //this.$log.debug(Intercept.InterceptorName, "Apply ", obj);
                 obj = (new Date(obj));
             };
             Intercept.prototype.SearchObj = function (obj) {
+                // this.$log.debug(Intercept.InterceptorName, "Search: ", obj);
                 var _this = this;
-                this.$log.debug(Intercept.InterceptorName, "Search: ", obj);
                 if (!obj)
                     return 0;
                 var t = typeof obj;
-                this.$log.debug(Intercept.InterceptorName, "Type ", t);
+                //this.$log.debug(Intercept.InterceptorName, "Type ", t);
                 if (t == this.stringType) {
                     if (this.regexList.some(function (r) { return r.exec(obj) !== null; })) {
                         this.ApplyFix(obj);
@@ -53,7 +53,7 @@ var Au;
                     }
                 }
                 if (Array.isArray(obj)) {
-                    this.$log.debug(Intercept.InterceptorName, "Is Array", obj.length);
+                    //  this.$log.debug(Intercept.InterceptorName, "Is Array", (<Array<any>>obj).length);
                     return obj.map(function (p) { return _this.SearchObj(p); }).reduce(function (a, b) {
                         return a + b;
                     }, 0);
@@ -61,7 +61,7 @@ var Au;
                 if (t == this.objectType) {
                     var res = 0;
                     for (var propertyName in obj) {
-                        this.$log.debug(Intercept.InterceptorName, "Property[" + propertyName + "]");
+                        //    this.$log.debug(Intercept.InterceptorName, "Property["+propertyName+"]");
                         if (obj[propertyName])
                             res += this.SearchObj(obj[propertyName]);
                     }

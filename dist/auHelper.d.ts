@@ -1,4 +1,10 @@
 declare module Au {
+    module Directive {
+        module clickOnEnter {
+            function Directive(): angular.IDirective;
+            var name: string;
+        }
+    }
     module Utils {
         class ngUtils {
             args: any;

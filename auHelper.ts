@@ -1,4 +1,27 @@
 ﻿module Au {
+    export module Directive {
+        export module clickOnEnter {
+            export function Directive(): angular.IDirective {
+                return (scope, element, attrs) => {
+
+                    var fn = e => {
+
+                        if (e.which == 13) {
+
+                            $(attrs.clickOnEnter).click();
+                        }
+                    };
+                    $(element).on("keyup", ":input", fn);
+                    scope.$on('$destroy', () => {
+                        $(":input", element).off("keyup", fn);
+                    });
+
+                };
+
+            }
+            export var name = "clickOnEnter";
+        }
+    }
     export module Utils {
         export class ngUtils {
             args: any = null;
@@ -191,6 +214,7 @@
     var app = angular.module(Au.moduleName);
 
     app.directive(Au.Utils.CtrlLoading.DirectiveName, Au.Utils.CtrlLoading.Directive);
+    app.directive(Au.Directive.clickOnEnter.name, Au.Directive.clickOnEnter.Directive);
     app.service(Au.Utils.ngUtils.serviceName,Au.Utils.ngUtils)
 })();
  

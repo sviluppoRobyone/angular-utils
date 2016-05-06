@@ -74,18 +74,28 @@
     <Content Include="bower_components\bootstrap\dist\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="bower_components\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="bower_components\bootstrap\dist\fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="packages.config" />
     <Content Include="bower.json" />
-    <Content Include="dist\AngularUtils.js.map" />
-    <Content Include="dist\demo.js.map" />
+    <Content Include="dist\AngularUtils.js.map">
+      <DependentUpon>AngularUtils.js</DependentUpon>
+    </Content>
+    <Content Include="dist\demo.js.map">
+      <DependentUpon>demo.js</DependentUpon>
+    </Content>
     <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.ttf" />
     <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.woff" />
     <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.woff2" />
     <Content Include="bower_components\components-font-awesome\fonts\FontAwesome.otf" />
-    <Content Include="dist\auDatepicker.js.map" />
-    <Content Include="dist\AuHttpDateFix.js.map" />
-    <Content Include="dist\auHelper.js.map" />
+    <Content Include="dist\auDatepicker.js.map">
+      <DependentUpon>auDatepicker.js</DependentUpon>
+    </Content>
+    <Content Include="dist\AuHttpDateFix.js.map">
+      <DependentUpon>AuHttpDateFix.js</DependentUpon>
+    </Content>
+    <Content Include="dist\auHelper.js.map">
+      <DependentUpon>auHelper.js</DependentUpon>
+    </Content>
+    <Content Include="packages.config" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

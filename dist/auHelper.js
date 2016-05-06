@@ -1,5 +1,26 @@
 var Au;
 (function (Au) {
+    var Directive;
+    (function (Directive_1) {
+        var clickOnEnter;
+        (function (clickOnEnter) {
+            function Directive() {
+                return function (scope, element, attrs) {
+                    var fn = function (e) {
+                        if (e.which == 13) {
+                            $(attrs.clickOnEnter).click();
+                        }
+                    };
+                    $(element).on("keyup", ":input", fn);
+                    scope.$on('$destroy', function () {
+                        $(":input", element).off("keyup", fn);
+                    });
+                };
+            }
+            clickOnEnter.Directive = Directive;
+            clickOnEnter.name = "clickOnEnter";
+        })(clickOnEnter = Directive_1.clickOnEnter || (Directive_1.clickOnEnter = {}));
+    })(Directive = Au.Directive || (Au.Directive = {}));
     var Utils;
     (function (Utils) {
         var ngUtils = (function () {
@@ -241,6 +262,7 @@ var Au;
 (function () {
     var app = angular.module(Au.moduleName);
     app.directive(Au.Utils.CtrlLoading.DirectiveName, Au.Utils.CtrlLoading.Directive);
+    app.directive(Au.Directive.clickOnEnter.name, Au.Directive.clickOnEnter.Directive);
     app.service(Au.Utils.ngUtils.serviceName, Au.Utils.ngUtils);
 })();
 //# sourceMappingURL=auHelper.js.map

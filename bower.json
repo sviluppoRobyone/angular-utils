@@ -1,9 +1,6 @@
 {
   "name": "AngularUtils",
   "version": "1.0.0",
-  "authors": [
-    "Gianluca Cagnin <gianluca.cagnin@robyone.net>"
-  ],
   "description": "",
   "main": [
     "./dist/AngularUtils.js",

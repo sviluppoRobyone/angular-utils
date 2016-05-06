@@ -48,21 +48,21 @@ var Au;
                 //this.$log.debug(Intercept.InterceptorName, "Type ", t);
                 if (t == this.stringType) {
                     if (this.regexList.some(function (r) { return r.exec(obj) !== null; })) {
-                        return this.ApplyFix(obj);
+                        obj = this.ApplyFix(obj);
                     }
                 }
-                if (Array.isArray(obj)) {
+                else if (Array.isArray(obj)) {
                     //  this.$log.debug(Intercept.InterceptorName, "Is Array", (<Array<any>>obj).length);
-                    return obj.map(function (p) { return _this.SearchObj(p); });
+                    obj = obj.map(function (p) { return _this.SearchObj(p); });
                 }
-                if (t == this.objectType) {
+                else if (t == this.objectType) {
                     for (var propertyName in obj) {
                         //    this.$log.debug(Intercept.InterceptorName, "Property["+propertyName+"]");
                         if (obj[propertyName])
                             obj[propertyName] = this.SearchObj(obj[propertyName]);
                     }
-                    return obj;
                 }
+                return obj;
             };
             Intercept.InterceptorName = "dateFixInterceptor";
             return Intercept;

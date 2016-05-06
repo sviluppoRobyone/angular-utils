@@ -20,8 +20,17 @@
         
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Annulla</button>
-        <button type="button" class="btn btn-primary save">Salva</button>
+        <button type="button" class="btn btn-danger pull-left delete">
+            <i class="fa fa-eraser"></i>           
+        </button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+            <i class="fa fa-undo"></i>
+            Annulla
+        </button>
+        <button type="button" class="btn btn-primary save">
+            <i class="fa fa-save"></i>
+            Salva
+        </button>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -64,7 +73,7 @@
 
                     };
                     dp.datepicker(options).on('changeDate', (e) => {
-                        console.log(e.date);
+                     //   console.log(e.date);
                         selectedDate = e.date;
                     });
 
@@ -89,6 +98,12 @@
                         modal.modal("hide");
 
                     });
+
+                    $(".delete", modal).click(() => {
+                        input.val("").trigger("input");
+                        modal.modal("hide");
+                    });
+
                     modal.modal("show");
 
 

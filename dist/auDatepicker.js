@@ -14,7 +14,7 @@ var Au;
             }
             Object.defineProperty(DatepickerFallback.prototype, "modalHtml", {
                 get: function () {
-                    return "<div class=\"modal fade\" tabindex=\"-1\" role=\"dialog\">\n  <div class=\"modal-dialog modal-sm\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n        <h4 class=\"modal-title\">Seleziona una data</h4>\n      </div>\n      <div class=\"modal-body\">\n        \n      </div>\n      <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Annulla</button>\n        <button type=\"button\" class=\"btn btn-primary save\">Salva</button>\n      </div>\n    </div><!-- /.modal-content -->\n  </div><!-- /.modal-dialog -->\n</div><!-- /.modal -->";
+                    return "<div class=\"modal fade\" tabindex=\"-1\" role=\"dialog\">\n  <div class=\"modal-dialog modal-sm\">\n    <div class=\"modal-content\">\n      <div class=\"modal-header\">\n        <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n        <h4 class=\"modal-title\">Seleziona una data</h4>\n      </div>\n      <div class=\"modal-body\">\n        \n      </div>\n      <div class=\"modal-footer\">\n        <button type=\"button\" class=\"btn btn-danger pull-left delete\">\n            <i class=\"fa fa-eraser\"></i>           \n        </button>\n        <button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">\n            <i class=\"fa fa-undo\"></i>\n            Annulla\n        </button>\n        <button type=\"button\" class=\"btn btn-primary save\">\n            <i class=\"fa fa-save\"></i>\n            Salva\n        </button>\n      </div>\n    </div><!-- /.modal-content -->\n  </div><!-- /.modal-dialog -->\n</div><!-- /.modal -->";
                 },
                 enumerable: true,
                 configurable: true
@@ -54,7 +54,7 @@ var Au;
                         todayBtn: true
                     };
                     dp.datepicker(options).on('changeDate', function (e) {
-                        console.log(e.date);
+                        //   console.log(e.date);
                         selectedDate = e.date;
                     });
                     var currentDate = input.val();
@@ -71,6 +71,10 @@ var Au;
                         var month = ("0" + (selectedDate.getMonth() + 1)).slice(-2);
                         var d = selectedDate.getFullYear() + "-" + month + "-" + day;
                         input.val(d).trigger("input");
+                        modal.modal("hide");
+                    });
+                    $(".delete", modal).click(function () {
+                        input.val("").trigger("input");
                         modal.modal("hide");
                     });
                     modal.modal("show");

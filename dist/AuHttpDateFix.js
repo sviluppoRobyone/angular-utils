@@ -15,7 +15,7 @@ var Au;
                 this.response = function (response) {
                     if (response.headers("Content-Type") && response.headers("Content-Type").indexOf("application/json") > -1) {
                         // this.$log.debug(Intercept.InterceptorName, "Response: ", response);
-                        _this.SearchObj(response.data);
+                        response.data = _this.SearchObj(response.data);
                     }
                     return response || _this.$q.when(response);
                 };
@@ -37,7 +37,7 @@ var Au;
             });
             Intercept.prototype.ApplyFix = function (obj) {
                 //this.$log.debug(Intercept.InterceptorName, "Apply ", obj);
-                obj = (new Date(obj));
+                return new Date(obj);
             };
             Intercept.prototype.SearchObj = function (obj) {
                 // this.$log.debug(Intercept.InterceptorName, "Search: ", obj);
@@ -48,24 +48,20 @@ var Au;
                 //this.$log.debug(Intercept.InterceptorName, "Type ", t);
                 if (t == this.stringType) {
                     if (this.regexList.some(function (r) { return r.exec(obj) !== null; })) {
-                        this.ApplyFix(obj);
-                        return 1;
+                        return this.ApplyFix(obj);
                     }
                 }
                 if (Array.isArray(obj)) {
                     //  this.$log.debug(Intercept.InterceptorName, "Is Array", (<Array<any>>obj).length);
-                    return obj.map(function (p) { return _this.SearchObj(p); }).reduce(function (a, b) {
-                        return a + b;
-                    }, 0);
+                    return obj.map(function (p) { return _this.SearchObj(p); });
                 }
                 if (t == this.objectType) {
-                    var res = 0;
                     for (var propertyName in obj) {
                         //    this.$log.debug(Intercept.InterceptorName, "Property["+propertyName+"]");
                         if (obj[propertyName])
-                            res += this.SearchObj(obj[propertyName]);
+                            obj[propertyName] = this.SearchObj(obj[propertyName]);
                     }
-                    return res;
+                    return obj;
                 }
             };
             Intercept.InterceptorName = "dateFixInterceptor";

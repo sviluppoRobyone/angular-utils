@@ -15,7 +15,7 @@
   "homepage": "",
   "ignore": [
     "*",
-    "!dist/*"
+    "!dist/**/*"
   
 
   ],

@@ -1027,7 +1027,7 @@ var au;
                 }
                 _super.apply(this, args);
                 this.directiveName = "auPassword";
-                this.type = "text";
+                this.type = "password";
             }
             PasswordInput.prototype.GetController = function () {
                 return PasswordInput;

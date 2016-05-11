@@ -289,7 +289,7 @@
 
 
                 this.directiveName = "auPassword";
-                 this.type = "text";
+                 this.type = "password";
 
 
              }   

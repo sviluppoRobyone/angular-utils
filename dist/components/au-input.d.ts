@@ -84,6 +84,10 @@ declare module au {
             GetController(): typeof TextInput;
             constructor(...args: any[]);
         }
+        class EmailInput extends StandardInput {
+            GetController(): typeof EmailInput;
+            constructor(...args: any[]);
+        }
         class PasswordInput extends StandardInput {
             GetController(): typeof PasswordInput;
             constructor(...args: any[]);

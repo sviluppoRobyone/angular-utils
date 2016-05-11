@@ -1018,6 +1018,23 @@ var au;
             return TextInput;
         })(StandardInput);
         input_1.TextInput = TextInput;
+        var EmailInput = (function (_super) {
+            __extends(EmailInput, _super);
+            function EmailInput() {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                    args[_i - 0] = arguments[_i];
+                }
+                _super.apply(this, args);
+                this.directiveName = "auEmail";
+                this.type = "email";
+            }
+            EmailInput.prototype.GetController = function () {
+                return EmailInput;
+            };
+            return EmailInput;
+        })(StandardInput);
+        input_1.EmailInput = EmailInput;
         var PasswordInput = (function (_super) {
             __extends(PasswordInput, _super);
             function PasswordInput() {
@@ -1162,7 +1179,8 @@ var au;
         au.input.FileInput,
         au.input.TextAreaInput,
         au.input.SelectInput,
-        au.input.PasswordInput
+        au.input.PasswordInput,
+        au.input.EmailInput
     ];
     inputsDirective.forEach(function (d) {
         var obj = new d();

@@ -280,6 +280,20 @@
 
              }   
         }
+        export class EmailInput extends StandardInput {
+            GetController() {
+                return EmailInput;
+            }
+            constructor(...args) {
+                super(...args);
+
+
+                this.directiveName = "auEmail";
+                this.type = "email";
+
+
+            }
+        }
          export class PasswordInput extends StandardInput{
                 GetController() {
                 return PasswordInput;
@@ -477,7 +491,8 @@
         au.input.FileInput,
         au.input.TextAreaInput,
         au.input.SelectInput,
-        au.input.PasswordInput
+        au.input.PasswordInput,
+        au.input.EmailInput
     ];
    
     inputsDirective.forEach(d => {

@@ -470,16 +470,18 @@
 
 (() => {
     var inputsDirective = [
-        new au.input.NumberInput,
-        new au.input.DateInput,
-        new au.input.TextInput,
-         new au.input.CheckboxInput,
-          new au.input.FileInput,
-           new au.input.TextAreaInput,
-        new au.input.SelectInput
+        au.input.NumberInput,
+        au.input.DateInput,
+        au.input.TextInput,
+        au.input.CheckboxInput,
+        au.input.FileInput,
+        au.input.TextAreaInput,
+        au.input.SelectInput,
+        au.input.PasswordInput
     ];
-
+   
     inputsDirective.forEach(d => {
-        angular.module(au.moduleName).directive(d.directiveName,()=> d.directive());
+        var obj = new d();
+        angular.module(au.moduleName).directive(obj.directiveName,()=> obj.directive());
     });
 })();

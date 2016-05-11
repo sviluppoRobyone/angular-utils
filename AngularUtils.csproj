@@ -38,20 +38,12 @@
     <Content Include="bower_components\components-font-awesome\css\font-awesome.min.css" />
     <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="bower_components\jquery\dist\jquery.js" />
-    <Content Include="dist\AngularUtils.js" />
-    <Content Include="dist\auDatepicker.js" />
-    <Content Include="dist\auHelper.js" />
-    <Content Include="dist\AuHttpDateFix.js" />
-    <Content Include="dist\demo.js" />
-    <Content Include="index.html" />
+    <Content Include="gruntfile.js" />
+    <Content Include="demo\index.html" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="auDatepicker.ts" />
-    <TypeScriptCompile Include="AngularUtils.ts" />
-    <TypeScriptCompile Include="AuHttpDateFix.ts" />
-    <TypeScriptCompile Include="auHelper.ts" />
-    <TypeScriptCompile Include="demo.ts" />
+    <TypeScriptCompile Include="demo\demo.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-animate.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-component-router.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-cookies.d.ts" />
@@ -64,6 +56,18 @@
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\es6-promise\es6-promise.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="src\au-button.ts" />
+    <TypeScriptCompile Include="src\au-click-on-key-enter.ts" />
+    <TypeScriptCompile Include="src\au-compare-to.ts" />
+    <TypeScriptCompile Include="src\au-core.ts" />
+    <TypeScriptCompile Include="src\au-errors.ts" />
+    <TypeScriptCompile Include="src\au-fileread.ts" />
+    <TypeScriptCompile Include="src\au-http-activity.ts" />
+    <TypeScriptCompile Include="src\au-input.ts" />
+    <TypeScriptCompile Include="src\au-datepicker.ts" />
+    <TypeScriptCompile Include="src\au-loading.ts" />
+    <TypeScriptCompile Include="src\au-ng-utils.ts" />
+    <TypeScriptCompile Include="src\au-http-date-parser.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="bower_components\bootstrap\dist\css\bootstrap-theme.css.map" />
@@ -75,27 +79,13 @@
     <Content Include="bower_components\bootstrap\dist\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="bower_components\bootstrap\dist\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="bower.json" />
-    <Content Include="dist\AngularUtils.js.map">
-      <DependentUpon>AngularUtils.js</DependentUpon>
-    </Content>
-    <Content Include="dist\demo.js.map">
-      <DependentUpon>demo.js</DependentUpon>
-    </Content>
     <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.eot" />
     <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.ttf" />
     <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.woff" />
     <Content Include="bower_components\components-font-awesome\fonts\fontawesome-webfont.woff2" />
     <Content Include="bower_components\components-font-awesome\fonts\FontAwesome.otf" />
-    <Content Include="dist\auDatepicker.js.map">
-      <DependentUpon>auDatepicker.js</DependentUpon>
-    </Content>
-    <Content Include="dist\AuHttpDateFix.js.map">
-      <DependentUpon>AuHttpDateFix.js</DependentUpon>
-    </Content>
-    <Content Include="dist\auHelper.js.map">
-      <DependentUpon>auHelper.js</DependentUpon>
-    </Content>
     <Content Include="packages.config" />
+    <Content Include="package.json" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -135,9 +125,10 @@
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
     <TypeScriptTarget>ES5</TypeScriptTarget>
     <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
-    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptCompileOnSaveEnabled>False</TypeScriptCompileOnSaveEnabled>
     <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
-    <TypeScriptModuleKind>None</TypeScriptModuleKind>
+    <TypeScriptModuleKind>
+    </TypeScriptModuleKind>
     <TypeScriptOutFile>
     </TypeScriptOutFile>
     <TypeScriptOutDir>dist/</TypeScriptOutDir>

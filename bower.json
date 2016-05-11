@@ -1,23 +1,11 @@
 {
-  "name": "AngularUtils",
-  "version": "1.0.0",
+  "name": "angular-utils",
+  "version": "2.0.0",
   "description": "",
   "main": [
-    "./dist/AngularUtils.js",
-    "./dist/AngularUtils.js.map",
-    "./dist/AngularUtils.d.ts",
-
-    "./dist/auDatepicker.js",
-    "./dist/auDatepicker.d.ts",
-    "./dist/auDatepicker.js.map",
-
-    "./dist/AuHttpDateFix.js",
-    "./dist/AuHttpDateFix.d.ts",
-    "./dist/AuHttpDateFix.js.map",
-
-    "./dist/auHelper.js",
-    "./dist/auHelper.d.ts",
-    "./dist/auHelper.js.map"
+    "./dist/au.js",
+    "./dist/au.js.map",
+    "./dist/au.d.ts"
 
   ],
   "moduleType": [
@@ -26,22 +14,9 @@
   "license": "MIT",
   "homepage": "",
   "ignore": [
-    "*",
-    "!dist/AngularUtils.js",
-    "!dist/AngularUtils.js",
-    "!dist/AngularUtils.d.ts",
+    "demo"
+  
 
-    "!dist/auDatepicker.js",
-    "!dist/auDatepicker.d.ts",
-    "!dist/auDatepicker.js.map",
-
-    "!dist/AuHttpDateFix.js",
-    "!dist/AuHttpDateFix.d.ts",
-    "!dist/AuHttpDateFix.js.map",
-
-    "!dist/auHelper.js",
-    "!dist/auHelper.d.ts",
-    "!dist/auHelper.js.map"
   ],
   "dependencies": {
     "angular": "~1.5.5",

@@ -21,6 +21,7 @@ declare module au {
             hasErrorClass: boolean;
             hasSuccessClass: boolean;
             hasWarnigClass: boolean;
+            brand: any;
             hasRequiredIcon: boolean;
             hasFeedbackIcon: boolean;
             json: {
@@ -106,10 +107,9 @@ declare module au {
             GetTemplate(): string;
         }
         class AwesomeCheckboxInput extends StandardInput {
-            GetController(): typeof CheckboxInput;
+            GetController(): typeof AwesomeCheckboxInput;
             rndId: string;
             constructor(...args: any[]);
-            type: any;
             GetTemplate(): string;
         }
         class FileInput extends StandardInput {

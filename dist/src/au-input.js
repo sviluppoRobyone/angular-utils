@@ -88,6 +88,13 @@ var au;
                 enumerable: true,
                 configurable: true
             });
+            Object.defineProperty(StandardInput.prototype, "brand", {
+                get: function () {
+                    return this.$scope["brand"] || "primary";
+                },
+                enumerable: true,
+                configurable: true
+            });
             Object.defineProperty(StandardInput.prototype, "hasRequiredIcon", {
                 get: function () {
                     return this.ready &&
@@ -337,7 +344,7 @@ var au;
                     replace: true,
                     template: GetBootstrapTemplate(angular.merge({}, this.templateCfg, { content: this.GetTemplate() })),
                     scope: {
-                        type: "@",
+                        brand: "@",
                         required: "=?",
                         readonly: "=?",
                         label: "@",
@@ -482,20 +489,12 @@ var au;
                 _super.apply(this, args);
                 this.rndId = new Date().getUTCMilliseconds().toString();
                 this.directiveName = "auAwesomeCheckbox";
-                var tmpObj = $("<div/>");
             }
             AwesomeCheckboxInput.prototype.GetController = function () {
-                return CheckboxInput;
+                return AwesomeCheckboxInput;
             };
-            Object.defineProperty(AwesomeCheckboxInput.prototype, "type", {
-                get: function () {
-                    return this.$scope["type"] || "primary";
-                },
-                enumerable: true,
-                configurable: true
-            });
             AwesomeCheckboxInput.prototype.GetTemplate = function () {
-                return "\n                <div class=\"checkbox {{Ctrl.type}}\">\n                     <input type=\"checkbox\" name=\"" + this.templateCfg.formName + "\" ng-model=\"Ctrl.model\" ng-required=\"Ctrl.required\" id=\"{{Ctrl.rndId}}\"  /> \n                 <label for=\"{{Ctrl.rndId}}\">\n                       {{Ctrl.label}}   \n                <span ng-if=\"Ctrl.hasFeedbackIcon\">\n                            <i class=\"glyphicon\" ng-class=\"{'glyphicon-ok':Ctrl.hasSuccessClass,'glyphicon-asterisk':Ctrl.hasRequiredIcon,'glyphicon-warning-sign':Ctrl.hasWarnigClass}\"></i>\n                                     </span>\n                    </label>\n                </div>\n            <label>\n             \n               \n          \n\n\n            ";
+                return "\n                <div class=\"checkbox checkbox-{{Ctrl.brand}}\">\n                     <input type=\"checkbox\" name=\"" + this.templateCfg.formName + "\" ng-model=\"Ctrl.model\" ng-required=\"Ctrl.required\" id=\"{{Ctrl.rndId}}\"  /> \n                 <label for=\"{{Ctrl.rndId}}\">\n                       {{Ctrl.label}}   \n                                <span ng-if=\"Ctrl.hasFeedbackIcon\">\n                            <i class=\"glyphicon\" ng-class=\"{'glyphicon-ok':Ctrl.hasSuccessClass,'glyphicon-asterisk':Ctrl.hasRequiredIcon,'glyphicon-warning-sign':Ctrl.hasWarnigClass}\"></i>\n                                     </span>\n                    </label>\n\n                </div>\n        \n\n            ";
             };
             return AwesomeCheckboxInput;
         }(StandardInput));
@@ -575,7 +574,8 @@ var au;
         au.input.TextAreaInput,
         au.input.SelectInput,
         au.input.PasswordInput,
-        au.input.EmailInput
+        au.input.EmailInput,
+        au.input.AwesomeCheckboxInput
     ];
     inputsDirective.forEach(function (d) {
         var obj = new d();

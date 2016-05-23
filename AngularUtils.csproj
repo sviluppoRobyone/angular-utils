@@ -22,6 +22,9 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".bowerrc">
+      <DependentUpon>bower.json</DependentUpon>
+    </Content>
     <Content Include="bower_components\angular\angular.js" />
     <Content Include="bower_components\awesome-bootstrap-checkbox\awesome-bootstrap-checkbox.css" />
     <Content Include="bower_components\bootstrap-datepicker\dist\css\bootstrap-datepicker3.min.css" />

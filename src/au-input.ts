@@ -21,7 +21,7 @@
                 return StandardFormGroup(`
 
        
-                <input ng-readonly="Ctrl.readonly" type="${this.type}" ng-model="Ctrl.model" class="form-control" name="${this.templateCfg.fieldName}" ng-attr-maxlength="{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}" ng-attr-minlength="{{Ctrl.hasMinLength?Ctrl.minLength:undefined}}" ng-pattern="Ctrl.getPattern()" ng-required="Ctrl.required" ng-attr-placeholder="{{Ctrl.placeholder?Ctrl.placeholder:undefined}}" ng-attr-min="{{Ctrl.minMaxEnabled && Ctrl.min ?Ctrl.min:undefined}}"  ng-attr-max="{{Ctrl.minMaxEnabled && Ctrl.max ? Ctrl.max:undefined}}" ng-attr-compare-to="Ctrl.hasCompare?Ctrl.compare:undefined" />
+                <input ng-readonly="Ctrl.readonly" type="${this.type}" ng-model="Ctrl.model" class="form-control" name="${this.templateCfg.fieldName}" ng-attr-maxlength="{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}" ng-attr-minlength="{{Ctrl.hasMinLength?Ctrl.minLength:undefined}}" ng-pattern="Ctrl.getPattern()" ng-required="Ctrl.required" ng-attr-placeholder="{{Ctrl.placeholder?Ctrl.placeholder:undefined}}" ng-attr-min="{{Ctrl.min ?Ctrl.min:undefined}}"  ng-attr-max="{{Ctrl.max ? Ctrl.max:undefined}}" ng-attr-compare-to="Ctrl.hasCompare?Ctrl.compare:undefined" />
                 
        
      
@@ -139,13 +139,17 @@
             get optionsValue() {
                 return this.$scope["optionsValue"] || "Value";
             }
-
+            GetNumberValueOrNull(key:string) {
+                var r = this.$scope[key];
+                if (r) return parseInt(r);
+                return null;
+            }
             get min() {
-                return this.$scope["min"] || null;
+               return this.GetNumberValueOrNull("min");
             }
 
             get max() {
-                return this.$scope["max"] || null;
+                return this.GetNumberValueOrNull("max");
             }
 
             get label() {
@@ -229,6 +233,15 @@
 
             get placeholder() {
                 return this.$scope["placeholder"] || null;
+            }
+            get addonLeft() {
+                return this.$scope["addonLeft"] || null;
+            }
+            get addonRight() {
+                return this.$scope["addonRight"] || null;
+            }
+            get hasAddon() {
+                return [this.addonLeft, this.addonRight].some(x => x != null);
             }
             GetController() {
                 return StandardInput;
@@ -464,17 +477,23 @@
             return `
             <label class="control-label" ng-if="Ctrl.hasLabel">{{Ctrl.label}}</label>
          
-            <div ng-class="{'input-group':Ctrl.hasAnyAddon}">
-                <span class="input-group-addon" ng-if="Ctrl.hasAddonLeft">{{Ctrl.addonLeft}}</span>
+            <div ng-class="{'input-group':Ctrl.hasAddon}">
+                <span class="input-group-addon" ng-if="Ctrl.addonLeft">{{Ctrl.addonLeft}}</span>
                 ${input}                
-                <span class="input-group-addon" ng-if="Ctrl.hasAddonRight">{{Ctrl.addonRight}}</span>
+                <span class="input-group-addon" ng-if="Ctrl.addonRight">
+{{Ctrl.addonRight}}
+</span>
+                <span class="input-group-addon" ng-if="Ctrl.addonRight && (Ctrl.hasSuccessClass||Ctrl.hasWarnigClass)">
+                    <i class="glyphicon" ng-class="{'glyphicon-ok':Ctrl.hasSuccessClass,'glyphicon-warning-sign':Ctrl.hasWarnigClass}" ></i>
+                </span>
             </div>
 
             <span title="Campo Richiesto" class="glyphicon glyphicon-asterisk form-control-feedback" ng-if="Ctrl.hasRequiredIcon" aria-hidden="true"></span>
-            <span class="glyphicon glyphicon-ok form-control-feedback" ng-if="Ctrl.hasSuccessClass" aria-hidden="true"></span>
-
-
-             <span class="glyphicon glyphicon-warning-sign form-control-feedback" ng-if="Ctrl.hasWarnigClass" aria-hidden="true"></span>`;
+                <span ng-if="!Ctrl.addonRight && (Ctrl.hasSuccessClass||Ctrl.hasWarnigClass)">
+                <span class="glyphicon form-control-feedback" ng-if="" ng-class="{'glyphicon-ok':Ctrl.hasSuccessClass,'glyphicon-warning-sign':Ctrl.hasWarnigClass}"></span>
+             
+                </span>
+           `;
         }
 
         function GetBootstrapTemplate(cfg: bootstrapTemplate) {

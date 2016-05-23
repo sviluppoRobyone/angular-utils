@@ -18,7 +18,7 @@
 
             data:Idata={
                 booleanInput: false,
-                numberInput: 0,
+                numberInput: -20,
                 patternInput:null,
                 textInput: "",
                 dateInput:null,

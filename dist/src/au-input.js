@@ -334,6 +334,27 @@ var au;
                 enumerable: true,
                 configurable: true
             });
+            Object.defineProperty(StandardInput.prototype, "addonLeft", {
+                get: function () {
+                    return this.$scope["addonLeft"] || null;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(StandardInput.prototype, "addonRight", {
+                get: function () {
+                    return this.$scope["addonRight"] || null;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(StandardInput.prototype, "hasAddon", {
+                get: function () {
+                    return [this.addonLeft, this.addonRight].some(function (x) { return x != null; });
+                },
+                enumerable: true,
+                configurable: true
+            });
             StandardInput.prototype.GetController = function () {
                 return StandardInput;
             };
@@ -557,7 +578,7 @@ var au;
         }(StandardInput));
         input_1.TextAreaInput = TextAreaInput;
         function StandardFormGroup(input) {
-            return "\n            <label class=\"control-label\" ng-if=\"Ctrl.hasLabel\">{{Ctrl.label}}</label>\n         \n            <div ng-class=\"{'input-group':Ctrl.hasAnyAddon}\">\n                <span class=\"input-group-addon\" ng-if=\"Ctrl.hasAddonLeft\">{{Ctrl.addonLeft}}</span>\n                " + input + "                \n                <span class=\"input-group-addon\" ng-if=\"Ctrl.hasAddonRight\">{{Ctrl.addonRight}}</span>\n            </div>\n\n            <span title=\"Campo Richiesto\" class=\"glyphicon glyphicon-asterisk form-control-feedback\" ng-if=\"Ctrl.hasRequiredIcon\" aria-hidden=\"true\"></span>\n            <span class=\"glyphicon glyphicon-ok form-control-feedback\" ng-if=\"Ctrl.hasSuccessClass\" aria-hidden=\"true\"></span>\n\n\n             <span class=\"glyphicon glyphicon-warning-sign form-control-feedback\" ng-if=\"Ctrl.hasWarnigClass\" aria-hidden=\"true\"></span>";
+            return "\n            <label class=\"control-label\" ng-if=\"Ctrl.hasLabel\">{{Ctrl.label}}</label>\n         \n            <div ng-class=\"{'input-group':Ctrl.hasAddon}\">\n                <span class=\"input-group-addon\" ng-if=\"Ctrl.addonLeft\">{{Ctrl.addonLeft}}</span>\n                " + input + "                \n                <span class=\"input-group-addon\" ng-if=\"Ctrl.addonRight\">{{Ctrl.addonRight}}</span>\n            </div>\n\n            <span title=\"Campo Richiesto\" class=\"glyphicon glyphicon-asterisk form-control-feedback\" ng-if=\"Ctrl.hasRequiredIcon\" aria-hidden=\"true\"></span>\n            <span class=\"glyphicon glyphicon-ok form-control-feedback\" ng-if=\"Ctrl.hasSuccessClass\" aria-hidden=\"true\"></span>\n\n\n             <span class=\"glyphicon glyphicon-warning-sign form-control-feedback\" ng-if=\"Ctrl.hasWarnigClass\" aria-hidden=\"true\"></span>";
         }
         function GetBootstrapTemplate(cfg) {
             return "\n    <div class=\"au-input\" ng-form=\"" + cfg.formName + "\" ng-class=\"{'well well-sm':Ctrl.debug}\">\n        <div class=\"form-group\" ng-class=\"{'has-error':Ctrl.hasErrorClass,'has-success':Ctrl.hasSuccessClass,'has-feedback':Ctrl.hasFeedbackIcon,'has-warning':Ctrl.hasWarnigClass}\">\n        \n            " + cfg.content + "\n\n\n\n            <ul class=\"help-block list-unstyled\" ng-show=\"" + cfg.formName + "." + cfg.fieldName + ".$dirty && " + cfg.formName + "." + cfg.fieldName + ".$invalid\">\n                <li ng-if=\"" + cfg.formName + "." + cfg.fieldName + ".$error.required\">{{Ctrl.requiredText}}</li>\n                <li ng-if=\"" + cfg.formName + "." + cfg.fieldName + ".$error.pattern\">{{Ctrl.patternText}}</li>\n                <li ng-if=\"" + cfg.formName + "." + cfg.fieldName + ".$error.min\">Valore minimo: {{Ctrl.min}}</li>\n                <li ng-if=\"" + cfg.formName + "." + cfg.fieldName + ".$error.max\">Valore massimo: {{Ctrl.max}}</li>\n                <li ng-if=\"" + cfg.formName + "." + cfg.fieldName + ".$error.minlength\">Lunghezza minima: {{Ctrl.minLength}} caratteri</li>\n                <li ng-if=\"" + cfg.formName + "." + cfg.fieldName + ".$error.maxlength\">Lunghezza massima: {{Ctrl.maxLength}} caratteri</li>\n                <li ng-if=\"" + cfg.formName + "." + cfg.fieldName + ".$error.compareTo\">Le password non coincidono</li>\n            </ul>\n            <p class=\"help-block\" ng-if=\"Ctrl.hasHelpText\">{{Ctrl.helpText}}</p>\n\n        </div>\n   \n    <pre ng-if=\"Ctrl.debug\" class=\"pre-scrollable\">{{Ctrl.json|json}}</pre>\n</div>\n\n\n";

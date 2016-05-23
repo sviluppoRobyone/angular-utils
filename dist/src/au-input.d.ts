@@ -78,6 +78,9 @@ declare module au {
             hasMinLength: boolean;
             minLength: any;
             placeholder: any;
+            addonLeft: any;
+            addonRight: any;
+            hasAddon: boolean;
             GetController(): typeof StandardInput;
             directive(): ng.IDirective;
         }

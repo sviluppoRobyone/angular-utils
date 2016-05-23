@@ -177,9 +177,9 @@ declare module au {
                 minLength: any;
                 hasHelpText: boolean;
                 helpText: any;
-                min: any;
+                min: number;
                 form: ng.IFormController;
-                max: any;
+                max: number;
                 type: string;
                 options: any;
                 optionsValue: any;
@@ -194,8 +194,9 @@ declare module au {
             options: any;
             optionsLabel: any;
             optionsValue: any;
-            min: any;
-            max: any;
+            GetNumberValueOrNull(key: string): number;
+            min: number;
+            max: number;
             label: any;
             hasLabel: boolean;
             model: any;
@@ -215,6 +216,9 @@ declare module au {
             hasMinLength: boolean;
             minLength: any;
             placeholder: any;
+            addonLeft: any;
+            addonRight: any;
+            hasAddon: boolean;
             GetController(): typeof StandardInput;
             directive(): ng.IDirective;
         }

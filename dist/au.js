@@ -664,7 +664,7 @@ var au;
                 this.args = args;
             }
             StandardInput.prototype.GetTemplate = function () {
-                return StandardFormGroup("\n\n       \n                <input ng-readonly=\"Ctrl.readonly\" type=\"" + this.type + "\" ng-model=\"Ctrl.model\" class=\"form-control\" name=\"" + this.templateCfg.fieldName + "\" ng-attr-maxlength=\"{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}\" ng-attr-minlength=\"{{Ctrl.hasMinLength?Ctrl.minLength:undefined}}\" ng-pattern=\"Ctrl.getPattern()\" ng-required=\"Ctrl.required\" ng-attr-placeholder=\"{{Ctrl.placeholder?Ctrl.placeholder:undefined}}\" ng-attr-min=\"{{Ctrl.minMaxEnabled && Ctrl.min ?Ctrl.min:undefined}}\"  ng-attr-max=\"{{Ctrl.minMaxEnabled && Ctrl.max ? Ctrl.max:undefined}}\" ng-attr-compare-to=\"Ctrl.hasCompare?Ctrl.compare:undefined\" />\n                \n       \n     \n\n\n");
+                return StandardFormGroup("\n\n       \n                <input ng-readonly=\"Ctrl.readonly\" type=\"" + this.type + "\" ng-model=\"Ctrl.model\" class=\"form-control\" name=\"" + this.templateCfg.fieldName + "\" ng-attr-maxlength=\"{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}\" ng-attr-minlength=\"{{Ctrl.hasMinLength?Ctrl.minLength:undefined}}\" ng-pattern=\"Ctrl.getPattern()\" ng-required=\"Ctrl.required\" ng-attr-placeholder=\"{{Ctrl.placeholder?Ctrl.placeholder:undefined}}\" ng-attr-min=\"{{Ctrl.min ?Ctrl.min:undefined}}\"  ng-attr-max=\"{{Ctrl.max ? Ctrl.max:undefined}}\" ng-attr-compare-to=\"Ctrl.hasCompare?Ctrl.compare:undefined\" />\n                \n       \n     \n\n\n");
             };
             Object.defineProperty(StandardInput.prototype, "$scope", {
                 get: function () {
@@ -825,16 +825,22 @@ var au;
                 enumerable: true,
                 configurable: true
             });
+            StandardInput.prototype.GetNumberValueOrNull = function (key) {
+                var r = this.$scope[key];
+                if (r)
+                    return parseInt(r);
+                return null;
+            };
             Object.defineProperty(StandardInput.prototype, "min", {
                 get: function () {
-                    return this.$scope["min"] || null;
+                    return this.GetNumberValueOrNull("min");
                 },
                 enumerable: true,
                 configurable: true
             });
             Object.defineProperty(StandardInput.prototype, "max", {
                 get: function () {
-                    return this.$scope["max"] || null;
+                    return this.GetNumberValueOrNull("max");
                 },
                 enumerable: true,
                 configurable: true
@@ -963,6 +969,27 @@ var au;
             Object.defineProperty(StandardInput.prototype, "placeholder", {
                 get: function () {
                     return this.$scope["placeholder"] || null;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(StandardInput.prototype, "addonLeft", {
+                get: function () {
+                    return this.$scope["addonLeft"] || null;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(StandardInput.prototype, "addonRight", {
+                get: function () {
+                    return this.$scope["addonRight"] || null;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(StandardInput.prototype, "hasAddon", {
+                get: function () {
+                    return [this.addonLeft, this.addonRight].some(function (x) { return x != null; });
                 },
                 enumerable: true,
                 configurable: true
@@ -1190,7 +1217,7 @@ var au;
         })(StandardInput);
         input_1.TextAreaInput = TextAreaInput;
         function StandardFormGroup(input) {
-            return "\n            <label class=\"control-label\" ng-if=\"Ctrl.hasLabel\">{{Ctrl.label}}</label>\n         \n            <div ng-class=\"{'input-group':Ctrl.hasAnyAddon}\">\n                <span class=\"input-group-addon\" ng-if=\"Ctrl.hasAddonLeft\">{{Ctrl.addonLeft}}</span>\n                " + input + "                \n                <span class=\"input-group-addon\" ng-if=\"Ctrl.hasAddonRight\">{{Ctrl.addonRight}}</span>\n            </div>\n\n            <span title=\"Campo Richiesto\" class=\"glyphicon glyphicon-asterisk form-control-feedback\" ng-if=\"Ctrl.hasRequiredIcon\" aria-hidden=\"true\"></span>\n            <span class=\"glyphicon glyphicon-ok form-control-feedback\" ng-if=\"Ctrl.hasSuccessClass\" aria-hidden=\"true\"></span>\n\n\n             <span class=\"glyphicon glyphicon-warning-sign form-control-feedback\" ng-if=\"Ctrl.hasWarnigClass\" aria-hidden=\"true\"></span>";
+            return "\n            <label class=\"control-label\" ng-if=\"Ctrl.hasLabel\">{{Ctrl.label}}</label>\n         \n            <div ng-class=\"{'input-group':Ctrl.hasAddon}\">\n                <span class=\"input-group-addon\" ng-if=\"Ctrl.addonLeft\">{{Ctrl.addonLeft}}</span>\n                " + input + "                \n                <span class=\"input-group-addon\" ng-if=\"Ctrl.addonRight\">\n{{Ctrl.addonRight}}\n</span>\n                <span class=\"input-group-addon\" ng-if=\"Ctrl.addonRight && (Ctrl.hasSuccessClass||Ctrl.hasWarnigClass)\">\n                    <i class=\"glyphicon\" ng-class=\"{'glyphicon-ok':Ctrl.hasSuccessClass,'glyphicon-warning-sign':Ctrl.hasWarnigClass}\" ></i>\n                </span>\n            </div>\n\n            <span title=\"Campo Richiesto\" class=\"glyphicon glyphicon-asterisk form-control-feedback\" ng-if=\"Ctrl.hasRequiredIcon\" aria-hidden=\"true\"></span>\n                <span ng-if=\"!Ctrl.addonRight && (Ctrl.hasSuccessClass||Ctrl.hasWarnigClass)\">\n                <span class=\"glyphicon form-control-feedback\" ng-if=\"\" ng-class=\"{'glyphicon-ok':Ctrl.hasSuccessClass,'glyphicon-warning-sign':Ctrl.hasWarnigClass}\"></span>\n             \n                </span>\n           ";
         }
         function GetBootstrapTemplate(cfg) {
             return "\n    <div class=\"au-input\" ng-form=\"" + cfg.formName + "\" ng-class=\"{'well well-sm':Ctrl.debug}\">\n        <div class=\"form-group\" ng-class=\"{'has-error':Ctrl.hasErrorClass,'has-success':Ctrl.hasSuccessClass,'has-feedback':Ctrl.hasFeedbackIcon,'has-warning':Ctrl.hasWarnigClass}\">\n        \n            " + cfg.content + "\n\n\n\n            <ul class=\"help-block list-unstyled\" ng-show=\"" + cfg.formName + "." + cfg.fieldName + ".$dirty && " + cfg.formName + "." + cfg.fieldName + ".$invalid\">\n                <li ng-if=\"" + cfg.formName + "." + cfg.fieldName + ".$error.required\">{{Ctrl.requiredText}}</li>\n                <li ng-if=\"" + cfg.formName + "." + cfg.fieldName + ".$error.pattern\">{{Ctrl.patternText}}</li>\n                <li ng-if=\"" + cfg.formName + "." + cfg.fieldName + ".$error.min\">Valore minimo: {{Ctrl.min}}</li>\n                <li ng-if=\"" + cfg.formName + "." + cfg.fieldName + ".$error.max\">Valore massimo: {{Ctrl.max}}</li>\n                <li ng-if=\"" + cfg.formName + "." + cfg.fieldName + ".$error.minlength\">Lunghezza minima: {{Ctrl.minLength}} caratteri</li>\n                <li ng-if=\"" + cfg.formName + "." + cfg.fieldName + ".$error.maxlength\">Lunghezza massima: {{Ctrl.maxLength}} caratteri</li>\n                <li ng-if=\"" + cfg.formName + "." + cfg.fieldName + ".$error.compareTo\">Le password non coincidono</li>\n            </ul>\n            <p class=\"help-block\" ng-if=\"Ctrl.hasHelpText\">{{Ctrl.helpText}}</p>\n\n        </div>\n   \n    <pre ng-if=\"Ctrl.debug\" class=\"pre-scrollable\">{{Ctrl.json|json}}</pre>\n</div>\n\n\n";

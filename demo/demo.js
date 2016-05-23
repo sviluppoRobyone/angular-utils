@@ -10,7 +10,7 @@ var au;
                 }
                 this.data = {
                     booleanInput: false,
-                    numberInput: 0,
+                    numberInput: -20,
                     patternInput: null,
                     textInput: "",
                     dateInput: null,

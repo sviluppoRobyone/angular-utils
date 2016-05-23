@@ -1351,7 +1351,7 @@ var au;
             });
             Object.defineProperty(ngUtils.prototype, "$locale", {
                 get: function () {
-                    return this.getFromInject("$cacheFactory");
+                    return this.getFromInject("$locale");
                 },
                 enumerable: true,
                 configurable: true

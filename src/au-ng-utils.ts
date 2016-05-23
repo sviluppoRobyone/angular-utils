@@ -16,7 +16,7 @@ export module ngUtils {
                 Object.defineProperty(this, "args", { enumerable: false });
     
             }
-            private getFromInject<T>(key:string) {
+            protected getFromInject<T>(key:string) {
                 if (!this.store[key])
                     this.store[key] = this.$injector.get<T>(key);
 
@@ -54,7 +54,7 @@ export module ngUtils {
                 return this.getFromInject("$cacheFactory");
             }
             get $locale(): angular.ILocaleService {
-                return this.getFromInject("$cacheFactory");
+                return this.getFromInject("$locale");
             }
             get $interval(): angular.IIntervalService {
                 return this.getFromInject("$interval");

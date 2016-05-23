@@ -290,7 +290,7 @@ declare module au {
             static $inject: string[];
             private store;
             constructor(...args: any[]);
-            private getFromInject<T>(key);
+            protected getFromInject<T>(key: string): any;
             $injector: angular.auto.IInjectorService;
             $http: angular.IHttpService;
             $location: angular.ILocationService;

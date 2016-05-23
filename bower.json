@@ -1,6 +1,6 @@
 {
   "name": "angular-utils",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "",
   "main": [
     "./dist/au.js",
@@ -24,6 +24,7 @@
     "jquery": "~2.2.3",
     "bootstrap": "~3.3.6",
     "components-font-awesome": "~4.5.0",
-    "bootstrap-datepicker": "~1.6.0"
+    "bootstrap-datepicker": "~1.6.0",
+    "awesome-bootstrap-checkbox": "~0.3.7"
   }
 }

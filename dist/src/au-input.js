@@ -14,7 +14,7 @@ var au;
                 this.content = "";
             }
             return bootstrapTemplate;
-        })();
+        }());
         input_1.bootstrapTemplate = bootstrapTemplate;
         var StandardInput = (function () {
             function StandardInput() {
@@ -88,13 +88,6 @@ var au;
                 enumerable: true,
                 configurable: true
             });
-            Object.defineProperty(StandardInput.prototype, "brand", {
-                get: function () {
-                    return this.$scope["brand"] || "primary";
-                },
-                enumerable: true,
-                configurable: true
-            });
             Object.defineProperty(StandardInput.prototype, "hasRequiredIcon", {
                 get: function () {
                     return this.ready &&
@@ -157,6 +150,7 @@ var au;
             });
             Object.defineProperty(StandardInput.prototype, "compare", {
                 get: function () {
+                    //se non c'è confronto con se stesso e va sempre bene
                     return this.hasCompare ? this.$scope["compare"] : this.model;
                 },
                 enumerable: true,
@@ -343,7 +337,7 @@ var au;
                     replace: true,
                     template: GetBootstrapTemplate(angular.merge({}, this.templateCfg, { content: this.GetTemplate() })),
                     scope: {
-                        brand: "@",
+                        type: "@",
                         required: "=?",
                         readonly: "=?",
                         label: "@",
@@ -372,7 +366,7 @@ var au;
             };
             StandardInput.$inject = ["$scope"];
             return StandardInput;
-        })();
+        }());
         input_1.StandardInput = StandardInput;
         var TextInput = (function (_super) {
             __extends(TextInput, _super);
@@ -389,7 +383,7 @@ var au;
                 return TextInput;
             };
             return TextInput;
-        })(StandardInput);
+        }(StandardInput));
         input_1.TextInput = TextInput;
         var EmailInput = (function (_super) {
             __extends(EmailInput, _super);
@@ -406,7 +400,7 @@ var au;
                 return EmailInput;
             };
             return EmailInput;
-        })(StandardInput);
+        }(StandardInput));
         input_1.EmailInput = EmailInput;
         var PasswordInput = (function (_super) {
             __extends(PasswordInput, _super);
@@ -423,7 +417,7 @@ var au;
                 return PasswordInput;
             };
             return PasswordInput;
-        })(StandardInput);
+        }(StandardInput));
         input_1.PasswordInput = PasswordInput;
         var DateInput = (function (_super) {
             __extends(DateInput, _super);
@@ -440,7 +434,7 @@ var au;
                 return DateInput;
             };
             return DateInput;
-        })(StandardInput);
+        }(StandardInput));
         input_1.DateInput = DateInput;
         var NumberInput = (function (_super) {
             __extends(NumberInput, _super);
@@ -457,7 +451,7 @@ var au;
                 return NumberInput;
             };
             return NumberInput;
-        })(StandardInput);
+        }(StandardInput));
         input_1.NumberInput = NumberInput;
         var CheckboxInput = (function (_super) {
             __extends(CheckboxInput, _super);
@@ -476,7 +470,7 @@ var au;
                 return "\n\n            <label>\n                <input type=\"checkbox\" name=\"" + this.templateCfg.formName + "\" ng-model=\"Ctrl.model\" ng-required=\"Ctrl.required\" /> {{Ctrl.label}} \n                <span ng-if=\"Ctrl.hasFeedbackIcon\">\n                    <i class=\"glyphicon\" ng-class=\"{'glyphicon-ok':Ctrl.hasSuccessClass,'glyphicon-asterisk':Ctrl.hasRequiredIcon,'glyphicon-warning-sign':Ctrl.hasWarnigClass}\"></i>\n                </span>\n            </label>\n\n\n            ";
             };
             return CheckboxInput;
-        })(StandardInput);
+        }(StandardInput));
         input_1.CheckboxInput = CheckboxInput;
         var AwesomeCheckboxInput = (function (_super) {
             __extends(AwesomeCheckboxInput, _super);
@@ -488,15 +482,23 @@ var au;
                 _super.apply(this, args);
                 this.rndId = new Date().getUTCMilliseconds().toString();
                 this.directiveName = "auAwesomeCheckbox";
+                var tmpObj = $("<div/>");
             }
             AwesomeCheckboxInput.prototype.GetController = function () {
-                return AwesomeCheckboxInput;
+                return CheckboxInput;
             };
+            Object.defineProperty(AwesomeCheckboxInput.prototype, "type", {
+                get: function () {
+                    return this.$scope["type"] || "primary";
+                },
+                enumerable: true,
+                configurable: true
+            });
             AwesomeCheckboxInput.prototype.GetTemplate = function () {
-                return "\n                <div class=\"checkbox checkbox-{{Ctrl.brand}}\">\n                     <input type=\"checkbox\" name=\"" + this.templateCfg.formName + "\" ng-model=\"Ctrl.model\" ng-required=\"Ctrl.required\" id=\"{{Ctrl.rndId}}\"  /> \n                 <label for=\"{{Ctrl.rndId}}\">\n                       {{Ctrl.label}}   \n                                <span ng-if=\"Ctrl.hasFeedbackIcon\">\n                            <i class=\"glyphicon\" ng-class=\"{'glyphicon-ok':Ctrl.hasSuccessClass,'glyphicon-asterisk':Ctrl.hasRequiredIcon,'glyphicon-warning-sign':Ctrl.hasWarnigClass}\"></i>\n                                     </span>\n                    </label>\n\n                </div>\n        \n\n            ";
+                return "\n                <div class=\"checkbox {{Ctrl.type}}\">\n                     <input type=\"checkbox\" name=\"" + this.templateCfg.formName + "\" ng-model=\"Ctrl.model\" ng-required=\"Ctrl.required\" id=\"{{Ctrl.rndId}}\"  /> \n                 <label for=\"{{Ctrl.rndId}}\">\n                       {{Ctrl.label}}   \n                <span ng-if=\"Ctrl.hasFeedbackIcon\">\n                            <i class=\"glyphicon\" ng-class=\"{'glyphicon-ok':Ctrl.hasSuccessClass,'glyphicon-asterisk':Ctrl.hasRequiredIcon,'glyphicon-warning-sign':Ctrl.hasWarnigClass}\"></i>\n                                     </span>\n                    </label>\n                </div>\n            <label>\n             \n               \n          \n\n\n            ";
             };
             return AwesomeCheckboxInput;
-        })(StandardInput);
+        }(StandardInput));
         input_1.AwesomeCheckboxInput = AwesomeCheckboxInput;
         var FileInput = (function (_super) {
             __extends(FileInput, _super);
@@ -515,7 +517,7 @@ var au;
                 return FileInput;
             };
             return FileInput;
-        })(StandardInput);
+        }(StandardInput));
         input_1.FileInput = FileInput;
         var SelectInput = (function (_super) {
             __extends(SelectInput, _super);
@@ -534,7 +536,7 @@ var au;
                 return SelectInput;
             };
             return SelectInput;
-        })(StandardInput);
+        }(StandardInput));
         input_1.SelectInput = SelectInput;
         var TextAreaInput = (function (_super) {
             __extends(TextAreaInput, _super);
@@ -553,7 +555,7 @@ var au;
                 return StandardFormGroup("\n                <textarea  ng-model=\"Ctrl.model\" class=\"form-control\" name=\"" + this.templateCfg.fieldName + "\" ng-attr-maxlength=\"{{Ctrl.hasMaxLength?Ctrl.maxLength:undefined}}\" ng-attr-minlength=\"{{Ctrl.hasMinLength?Ctrl.minLength:undefined}}\" ng-pattern=\"Ctrl.getPattern()\" ng-required=\"Ctrl.required\" ng-readonly=\"Ctrl.readonly\" ng-attr-placeholder=\"{{Ctrl.placeholder?Ctrl.placeholder:undefined}}\" ></textarea>\n");
             };
             return TextAreaInput;
-        })(StandardInput);
+        }(StandardInput));
         input_1.TextAreaInput = TextAreaInput;
         function StandardFormGroup(input) {
             return "\n            <label class=\"control-label\" ng-if=\"Ctrl.hasLabel\">{{Ctrl.label}}</label>\n         \n            <div ng-class=\"{'input-group':Ctrl.hasAnyAddon}\">\n                <span class=\"input-group-addon\" ng-if=\"Ctrl.hasAddonLeft\">{{Ctrl.addonLeft}}</span>\n                " + input + "                \n                <span class=\"input-group-addon\" ng-if=\"Ctrl.hasAddonRight\">{{Ctrl.addonRight}}</span>\n            </div>\n\n            <span title=\"Campo Richiesto\" class=\"glyphicon glyphicon-asterisk form-control-feedback\" ng-if=\"Ctrl.hasRequiredIcon\" aria-hidden=\"true\"></span>\n            <span class=\"glyphicon glyphicon-ok form-control-feedback\" ng-if=\"Ctrl.hasSuccessClass\" aria-hidden=\"true\"></span>\n\n\n             <span class=\"glyphicon glyphicon-warning-sign form-control-feedback\" ng-if=\"Ctrl.hasWarnigClass\" aria-hidden=\"true\"></span>";
@@ -573,8 +575,7 @@ var au;
         au.input.TextAreaInput,
         au.input.SelectInput,
         au.input.PasswordInput,
-        au.input.EmailInput,
-        au.input.AwesomeCheckboxInput
+        au.input.EmailInput
     ];
     inputsDirective.forEach(function (d) {
         var obj = new d();

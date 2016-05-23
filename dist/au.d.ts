@@ -158,6 +158,7 @@ declare module au {
             hasErrorClass: boolean;
             hasSuccessClass: boolean;
             hasWarnigClass: boolean;
+            brand: any;
             hasRequiredIcon: boolean;
             hasFeedbackIcon: boolean;
             json: {
@@ -239,6 +240,12 @@ declare module au {
         }
         class CheckboxInput extends StandardInput {
             GetController(): typeof CheckboxInput;
+            constructor(...args: any[]);
+            GetTemplate(): string;
+        }
+        class AwesomeCheckboxInput extends StandardInput {
+            GetController(): typeof AwesomeCheckboxInput;
+            rndId: string;
             constructor(...args: any[]);
             GetTemplate(): string;
         }

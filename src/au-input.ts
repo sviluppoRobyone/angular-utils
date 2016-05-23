@@ -12,7 +12,8 @@
             private args: any[] = [];
             static $inject = ["$scope"];
             templateCfg: bootstrapTemplate=new bootstrapTemplate();
-            directiveName:string="auInput";
+            directiveName: string = "auInput";
+            
             type="text";
 
 
@@ -66,7 +67,9 @@
             get hasWarnigClass() {
                 return this.ready && !this.noFeedback && this.field.$invalid && !this.field.$pristine;
             }
-
+            get brand() {
+                return this.$scope["brand"] || "primary";
+            }
             get hasRequiredIcon() {
                 return this.ready &&
                     !this.noFeedback &&
@@ -238,7 +241,7 @@
                     replace: true,
                     template:<any> GetBootstrapTemplate(angular.merge({},this.templateCfg, {content:this.GetTemplate()})),
                     scope: {
-                        auInput: "=",
+                        brand: "@",
                         required: "=?",
                         readonly: "=?",
                         label: "@",
@@ -362,10 +365,38 @@
             </label>
 
 
- `;
+            `;
             }
         }
+        export class AwesomeCheckboxInput extends StandardInput {
 
+            GetController() {
+                return AwesomeCheckboxInput;
+            }
+            rndId: string = new Date().getUTCMilliseconds().toString();
+            constructor(...args) {
+                super(...args);
+                this.directiveName = "auAwesomeCheckbox";
+            }
+            
+
+            GetTemplate() {
+                return `
+                <div class="checkbox checkbox-{{Ctrl.brand}}">
+                     <input type="checkbox" name="${this.templateCfg.formName}" ng-model="Ctrl.model" ng-required="Ctrl.required" id="{{Ctrl.rndId}}"  /> 
+                 <label for="{{Ctrl.rndId}}">
+                       {{Ctrl.label}}   
+                                <span ng-if="Ctrl.hasFeedbackIcon">
+                            <i class="glyphicon" ng-class="{'glyphicon-ok':Ctrl.hasSuccessClass,'glyphicon-asterisk':Ctrl.hasRequiredIcon,'glyphicon-warning-sign':Ctrl.hasWarnigClass}"></i>
+                                     </span>
+                    </label>
+
+                </div>
+        
+
+            `;
+            }
+        }
         export class FileInput extends StandardInput {
 
 
@@ -492,7 +523,8 @@
         au.input.TextAreaInput,
         au.input.SelectInput,
         au.input.PasswordInput,
-        au.input.EmailInput
+        au.input.EmailInput,
+        au.input.AwesomeCheckboxInput
     ];
    
     inputsDirective.forEach(d => {
